@@ -1,26 +1,25 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import useLocalStorage from 'use-local-storage';
+import ThemeSwitch from './UI/ThemeSwitch';
+import './App.css'
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const defaultDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+	const [theme, setTheme] = useLocalStorage(
+		'theme',
+		defaultDark ? 'dark' : 'light'
+	);
+  const changeThemeHandler = ()=>{
+    const newTheme:string = theme==='light'?'dark':'light';
+    setTheme(newTheme)
+  }
+
+	return (
+		<div className="App" data-theme={theme}>
+			<h2 style={{ color: 'var(--accent' }}>hello world</h2>
+      <ThemeSwitch onClick ={changeThemeHandler} theme={theme}/>
+		</div>
+	);
 }
 
 export default App;
