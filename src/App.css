@@ -1,6 +1,7 @@
-.App>* {
-    transition: all .5s;
-}
+/* .App>*{
+    transition: background-color .3s ease;
+} */
+
 
 .form-check-input:checked{
     background-color: var(--accent) !important;

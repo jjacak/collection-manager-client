@@ -1,0 +1,15 @@
+.button-group .button {
+	background: none;
+	color: var(--text-primary);
+	border: none;
+}
+
+.button-group .button:hover,
+.button-group .button:active {
+	color: var(--accent);
+    background: none;
+}
+
+.button-group .separator {
+    color: var(--text-primary);
+}

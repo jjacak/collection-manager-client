@@ -1,9 +1,10 @@
-import React,{Suspense} from 'react';
-import './App.css'
+import React, { Suspense } from 'react';
+import './App.css';
 import useLocalStorage from 'use-local-storage';
-import ThemeSwitch from './UI/ThemeSwitch';
-import './i18n'
-import SwitchLanguage from './UI/SwitchLanguage';
+import './i18n';
+import TopNavbar from './components/TopNavbar';
+import SideNavbar from './components/SideNavbar';
+import { Outlet } from 'react-router-dom';
 
 function App() {
 	const defaultDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -11,18 +12,20 @@ function App() {
 		'theme',
 		defaultDark ? 'dark' : 'light'
 	);
-  const changeThemeHandler = ()=>{
-    const newTheme:string = theme==='light'?'dark':'light';
-    setTheme(newTheme)
-  }
+	const changeThemeHandler = () => {
+		const newTheme: string = theme === 'light' ? 'dark' : 'light';
+		setTheme(newTheme);
+	};
 
 	return (
 		<div className="App" data-theme={theme}>
-      <Suspense fallback={null}>  
-			<h2 style={{ color: 'var(--accent' }}>hello world</h2>
-      <ThemeSwitch onClick ={changeThemeHandler} theme={theme}/>
-      <SwitchLanguage/>
-        </Suspense>
+			<Suspense fallback={null}>
+				<TopNavbar />
+	
+					<SideNavbar onChangeTheme={changeThemeHandler} theme={theme} />
+					<Outlet />
+			
+			</Suspense>
 		</div>
 	);
 }

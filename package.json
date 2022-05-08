@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@primer/octicons-react": "^17.1.0",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
     "@testing-library/user-event": "^13.5.0",
@@ -14,10 +15,14 @@
     "i18next": "^21.7.1",
     "i18next-browser-languagedetector": "^6.1.4",
     "i18next-xhr-backend": "^3.2.2",
+    "node-sass": "^7.0.1",
     "react": "^18.1.0",
     "react-bootstrap": "^2.3.1",
     "react-dom": "^18.1.0",
     "react-i18next": "^11.16.9",
+    "react-pro-sidebar": "^0.7.1",
+    "react-router-bootstrap": "^0.26.1",
+    "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "typescript": "^4.6.4",
     "use-local-storage": "^2.3.6",
@@ -48,6 +53,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-router-bootstrap": "^0.24.5",
     "netlify-cli": "^10.3.0"
   }
 }

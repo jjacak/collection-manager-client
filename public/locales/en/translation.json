@@ -1,3 +1,10 @@
 {
-    "dark_theme": "Dark theme"
+    "dark_theme": "Dark theme",
+    "my_account": "My account",
+    "my_info": "Personal info",
+   " my_collections":"My collections",
+    "dashboard":"Dashboard",
+    "not_found":"404 Not Found",
+    "not_found_message":"Sorry, an error has occured, requested page not found!",
+    "take_me_home":"Take me Home"
 }

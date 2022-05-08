@@ -1,3 +1,10 @@
 {
-    "dark_theme": "Ciemny motyw"
+    "dark_theme": "Ciemny motyw",
+    "my_account": "Moje konto",
+    "my_info": "Moje dane",
+    "my_collections":"Moje kolekcje",
+    "dashboard":"Strona główna",
+    "not_found":"404 Nie Znaleziono",
+    "not_found_message":"Przepraszamy, strona o podanym adresie nie została odnaleziona!",
+    "take_me_home":"Powrót na stronę główną"
 }

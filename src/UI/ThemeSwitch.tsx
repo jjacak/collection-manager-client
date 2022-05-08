@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 
 
-const ThemeSwitch: React.FC<{ onClick: () => void; theme: string }> = (
+const ThemeSwitch: React.FC<{ onChangeTheme: () => void; theme: string }> = (
 	props
 ) => {
 	const defaultCheckedState = props.theme==='dark'?true:false;
@@ -20,7 +20,7 @@ const ThemeSwitch: React.FC<{ onClick: () => void; theme: string }> = (
 				id="theme-switch"
 				label={t('dark_theme')}
 				checked={checked}
-				onClick={props.onClick}
+				onClick={props.onChangeTheme}
 				onChange = {switchHandler}
 			
 			/>
