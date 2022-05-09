@@ -8,16 +8,18 @@ body {
 }
 
 :root {
-	--background: rgb(255,255,255);
+	--background: rgb(255, 255, 255);
 	--components-background: rgb(239, 239, 239);
 	--text-primary: rgb(33, 33, 33);
 	--text-secondary: rgb(0, 139, 105);
 	--accent: rgb(5, 193, 156);
+	--card-border: rgba(0, 0, 0, 0.125);
 }
 [data-theme='dark'] {
-	--background: rgb(66,66,66);
+	--background: rgb(66, 66, 66);
 	--components-background: rgb(33, 33, 33);
-	--text-primary: rgb(239,239,239);
+	--text-primary: rgb(239, 239, 239);
 	--text-secondary: rgb(205, 211, 213);
-	--accent: rgb(195, 60, 84);
+	--accent: rgb(0, 139, 105);
+	--card-border: rgba(255, 255, 255 0.125);
 }

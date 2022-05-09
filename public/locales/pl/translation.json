@@ -6,5 +6,10 @@
     "dashboard":"Strona główna",
     "not_found":"404 Nie Znaleziono",
     "not_found_message":"Przepraszamy, strona o podanym adresie nie została odnaleziona!",
-    "take_me_home":"Powrót na stronę główną"
+    "take_me_home":"Powrót na stronę główną",
+    "log_in":"Zaloguj",
+    "log_out":"Wyloguj",
+    "sign_up":"Zarejestruj się",
+    "account_details": "Informacje szczegółowe",
+	"name":"Nazwa"
 }

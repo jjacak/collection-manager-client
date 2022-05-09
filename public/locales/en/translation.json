@@ -1,10 +1,15 @@
 {
-    "dark_theme": "Dark theme",
-    "my_account": "My account",
-    "my_info": "Personal info",
-   " my_collections":"My collections",
-    "dashboard":"Dashboard",
-    "not_found":"404 Not Found",
-    "not_found_message":"Sorry, an error has occured, requested page not found!",
-    "take_me_home":"Take me Home"
+	"dark_theme": "Dark theme",
+	"my_account": "My account",
+	"my_info": "Personal info",
+	" my_collections": "My collections",
+	"dashboard": "Dashboard",
+	"not_found": "404 Not Found",
+	"not_found_message": "Sorry, an error has occured, requested page not found!",
+	"take_me_home": "Take me Home",
+	"log_in": "Log In",
+	"log_out": "Log Out",
+	"sign_up": "Sign up",
+	"account_details": "Account details",
+	"name":"Name"
 }

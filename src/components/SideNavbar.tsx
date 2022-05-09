@@ -6,12 +6,16 @@ import classes from './SideNavbar.module.css';
 import { useTranslation } from 'react-i18next';
 import { ThreeBarsIcon } from '@primer/octicons-react';
 import { LinkContainer } from 'react-router-bootstrap';
+import AuthenticationButton from '../UI/AuthenthicationButton';
+import SignupButton from '../UI/SignupButton';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const SideNavbar: React.FC<{ onChangeTheme: () => void; theme: string }> = (
 	props
 ) => {
 	const { t } = useTranslation();
 	const [navbarCollapsed, setatNavbarCollapsed] = useState<boolean>(true);
+	const { isAuthenticated } = useAuth0();
 
 	const toggleNavbar = () => {
 		setatNavbarCollapsed((previous) => !previous);
@@ -38,11 +42,25 @@ const SideNavbar: React.FC<{ onChangeTheme: () => void; theme: string }> = (
 						/>
 					</MenuItem>
 					<MenuItem>
-						<LinkContainer to="/"><p>{t('dashboard')}</p></LinkContainer>
+						<AuthenticationButton />
 					</MenuItem>
+					{!isAuthenticated && (
+						<MenuItem>
+							<SignupButton />
+						</MenuItem>
+					)}
 					<MenuItem>
-						<LinkContainer to="account-details"><p>{t('my_account')}</p></LinkContainer>
+						<LinkContainer to="/">
+							<p>{t('dashboard')}</p>
+						</LinkContainer>
 					</MenuItem>
+					{isAuthenticated && (
+						<MenuItem>
+							<LinkContainer to="profile">
+								<p>{t('my_account')}</p>
+							</LinkContainer>
+						</MenuItem>
+					)}
 				</Menu>
 			</ProSidebar>
 		</aside>
