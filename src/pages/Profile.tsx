@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 const Profile: React.FC = () => {
 	const { user, isAuthenticated, isLoading } = useAuth0();
 	const { t } = useTranslation();
+    console.log('profile')
 
 	if (isLoading) {
 		return <div>Loading ...</div>;

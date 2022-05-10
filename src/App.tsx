@@ -21,10 +21,8 @@ function App() {
 		<div className="App" data-theme={theme}>
 			<Suspense fallback={null}>
 				<TopNavbar />
-	
-					<SideNavbar onChangeTheme={changeThemeHandler} theme={theme} />
-					<Outlet />
-			
+				<SideNavbar onChangeTheme={changeThemeHandler} theme={theme} />
+				<Outlet />
 			</Suspense>
 		</div>
 	);

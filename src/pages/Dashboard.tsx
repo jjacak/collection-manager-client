@@ -1,4 +1,5 @@
 const Dashboard = () => {
+	console.log('dash')
 	return (
 		<section>
 			<h1>Lorem ipsum dolor sit amet.</h1>
