@@ -4,18 +4,20 @@ import { Card, ListGroup, ListGroupItem } from 'react-bootstrap';
 import classes from './Profile.module.css';
 import { useTranslation } from 'react-i18next';
 
+
 const Profile: React.FC = () => {
 	const { user, isAuthenticated, isLoading } = useAuth0();
 	const { t } = useTranslation();
-    console.log('profile')
 
 	if (isLoading) {
 		return <div>Loading ...</div>;
 	}
 	if (isAuthenticated) {
 		return (
-			<Card className={classes['profile-card']}>
-				<Card.Img variant="top" src={user!.picture} alt={user!.name} />
+		<section className={classes.profile}>
+			<h1 className='text-center mb-4'>Profile</h1>
+			<img className = {classes.img}src={user!.picture} alt={user!.name}/>
+				<Card className={classes['profile-card']}>
 				<Card.Body>
 					<Card.Title className="text-center">{t("account_details")}:</Card.Title>
 					<ListGroup className="list-group-flush">
@@ -34,6 +36,7 @@ const Profile: React.FC = () => {
 					</ListGroup>
 				</Card.Body>
 			</Card>
+		</section>
 		);
 	}
 	return null;

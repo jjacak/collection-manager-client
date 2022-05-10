@@ -1,7 +1,9 @@
+
+
 const Dashboard = () => {
-	console.log('dash')
 	return (
-		<section>
+	
+			<section>
 			<h1>Lorem ipsum dolor sit amet.</h1>
 			<p>
 				Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quaerat
@@ -16,6 +18,7 @@ const Dashboard = () => {
 				consectetur?
 			</p>
 		</section>
+		
 	);
 };
 
