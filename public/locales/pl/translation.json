@@ -11,5 +11,6 @@
     "log_out":"Wyloguj",
     "sign_up":"Zarejestruj się",
     "account_details": "Informacje szczegółowe",
-	"name":"Nazwa"
+	"name":"Nazwa",
+    "user_management":"Zarządzaj Użytkownikami"
 }

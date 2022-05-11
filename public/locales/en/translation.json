@@ -11,5 +11,6 @@
 	"log_out": "Log Out",
 	"sign_up": "Sign up",
 	"account_details": "Account details",
-	"name":"Name"
+	"name":"Name",
+	"user_management":"User Management"
 }

@@ -10,6 +10,7 @@ import { ProtectedRoute } from './auth/protected-route';
 import Profile from './pages/Profile';
 import Dashboard from './pages/Dashboard';
 import NotFound from './pages/NotFound';
+import AdminPanel from './pages/AdminPanel';
 
 function App() {
 	const defaultDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -34,6 +35,7 @@ function App() {
 							path="/profile"
 							element={<ProtectedRoute component={Profile} />}
 						/>
+            <Route path='admin' element={<AdminPanel/>}/>
 						<Route path="*" element={<NotFound />} />
 					</Routes>
 				</Content>
