@@ -7,6 +7,7 @@ import './components/sideNavbarVariables.scss';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Auth0Provider } from '@auth0/auth0-react';
 import Auth0ProviderWithHistory from './auth/auth0-provider-with-history';
+import ThemeContextProvider from './store/theme-context';
 
 const root = ReactDOM.createRoot(
 	document.getElementById('root') as HTMLElement
@@ -14,7 +15,9 @@ const root = ReactDOM.createRoot(
 root.render(
 	<Router>
 		<Auth0ProviderWithHistory>
-			<App />
+			<ThemeContextProvider>
+      <App />
+      </ThemeContextProvider>
 		</Auth0ProviderWithHistory>
 	</Router>
 );

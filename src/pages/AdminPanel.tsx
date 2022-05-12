@@ -1,15 +1,17 @@
 import { useTranslation } from 'react-i18next';
 import { Table } from 'react-bootstrap';
+import { useContext } from 'react';
+import { ThemeContext } from '../store/theme-context';
 
 const AdminPanel = () => {
 	const { t } = useTranslation();
+    const themeContext = useContext(ThemeContext);
 
 
 	return (
 		<section>
 			<h1 className="text-center">{t('user_management')}</h1>
-            {/* set variant to dark on theme change */}
-			<Table striped bordered hover>
+			<Table striped bordered hover variant={themeContext.theme==='dark'?'dark':''}>
 				<thead>
 					<tr>
 						<th>#</th>

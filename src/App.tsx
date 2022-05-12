@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useContext } from 'react';
 import './App.css';
 import useLocalStorage from 'use-local-storage';
 import './i18n';
@@ -11,23 +11,15 @@ import Profile from './pages/Profile';
 import Dashboard from './pages/Dashboard';
 import NotFound from './pages/NotFound';
 import AdminPanel from './pages/AdminPanel';
+import { ThemeContext } from './store/theme-context';
 
 function App() {
-	const defaultDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-	const [theme, setTheme] = useLocalStorage(
-		'theme',
-		defaultDark ? 'dark' : 'light'
-	);
-	const changeThemeHandler = () => {
-		const newTheme: string = theme === 'light' ? 'dark' : 'light';
-		setTheme(newTheme);
-	};
-
+	const themeContext = useContext(ThemeContext)
 	return (
-		<div className="App" data-theme={theme}>
+		<div className="App" data-theme={themeContext.theme}>
 			<Suspense fallback={null}>
 				<TopNavbar />
-				<SideNavbar onChangeTheme={changeThemeHandler} theme={theme} />
+				<SideNavbar onChangeTheme={themeContext.switchTheme} theme={themeContext.theme} />
 				<Content>
 					<Routes>
 						<Route path="/" element={<Dashboard />} />
