@@ -1,11 +1,9 @@
 import React, { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Auth0Provider } from '@auth0/auth0-react';
+import {propsChildren} from '../ts/types'
 
-type authProps = {
-children:React.ReactNode
-}
-const Auth0ProviderWithHistory:React.FC<authProps> = (props) => {
+const Auth0ProviderWithHistory:React.FC<propsChildren> = (props) => {
   const domain:any = process.env.REACT_APP_AUTH0_DOMAIN;
   const clientId:any = process.env.REACT_APP_AUTH0_CLIENT_ID;
   const audience:any = process.env.REACT_APP_AUTH0_AUDIENCE;
@@ -22,6 +20,7 @@ const Auth0ProviderWithHistory:React.FC<authProps> = (props) => {
       clientId={clientId}
       redirectUri={window.location.origin}
       onRedirectCallback={onRedirectCallback}
+      // audience={audience}
     >
       {props.children}
     </Auth0Provider>

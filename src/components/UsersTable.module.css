@@ -1,0 +1,8 @@
+.actions .actions-button {
+	color: var(--text-primary);
+	transition: color 0.3s ease;
+}
+
+.actions .actions-button:hover {
+	color: var(--accent);
+}

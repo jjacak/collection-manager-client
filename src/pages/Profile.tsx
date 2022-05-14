@@ -9,6 +9,8 @@ const Profile: React.FC = () => {
 	const { user, isAuthenticated, isLoading } = useAuth0();
 	const { t } = useTranslation();
 
+	console.log(user!['http:/collection-manager-app.com/roles'])
+
 	if (isLoading) {
 		return <div>Loading ...</div>;
 	}

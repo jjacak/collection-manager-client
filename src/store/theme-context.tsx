@@ -1,9 +1,7 @@
 import React from 'react';
 import useLocalStorage from 'use-local-storage';
+import {propsChildren} from '../ts/types'
 
-type themeProviderType = {
-	children: React.ReactNode;
-};
 type themeContextType = {
 	theme: string;
 	switchTheme: () => void;
@@ -15,7 +13,7 @@ export const ThemeContext = React.createContext<themeContextType>({
 	theme: defaultDark ? 'dark' : 'light',
 	switchTheme: () => {},
 });
-const ThemeContextProvider: React.FC<themeProviderType> = (props) => {
+const ThemeContextProvider: React.FC<propsChildren> = (props) => {
 	const [theme, setTheme] = useLocalStorage(
 		'theme',
 		defaultDark ? 'dark' : 'light'
