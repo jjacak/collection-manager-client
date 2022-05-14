@@ -15,7 +15,10 @@ const SideNavbar: React.FC<{ onChangeTheme: () => void; theme: string }> = (
 ) => {
 	const { t } = useTranslation();
 	const [navbarCollapsed, setatNavbarCollapsed] = useState<boolean>(true);
-	const { isAuthenticated } = useAuth0();
+	const { isAuthenticated, user } = useAuth0();
+	
+	const isAdmin =
+		user && user['http:/collection-manager-app.com/roles'].includes('admin');
 
 	const toggleNavbar = () => {
 		setatNavbarCollapsed((previous) => !previous);
@@ -58,6 +61,13 @@ const SideNavbar: React.FC<{ onChangeTheme: () => void; theme: string }> = (
 						<MenuItem>
 							<LinkContainer to="profile">
 								<p>{t('my_account')}</p>
+							</LinkContainer>
+						</MenuItem>
+					)}
+					{isAuthenticated && isAdmin&& (
+						<MenuItem>
+							<LinkContainer to="admin">
+								<p>Admin</p>
 							</LinkContainer>
 						</MenuItem>
 					)}

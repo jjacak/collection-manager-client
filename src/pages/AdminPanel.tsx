@@ -9,49 +9,67 @@ const AdminPanel = () => {
 	const { t } = useTranslation();
 	const [users, setUsers] = useState<User[]>([]);
 	const [error, setError] = useState(null);
-	const { getAccessTokenSilently, isAuthenticated, user } = useAuth0();
-    console.log(user)
-
-
+	const [isLoading, setIsLoading] = useState(false);
+	const { getAccessTokenSilently } = useAuth0();
+	console.log(users);
 
 	const getUsers = async () => {
+		setIsLoading(true);
+		setError(null);
 		try {
-            console.log(123)
 			const accessToken = await getAccessTokenSilently({
-                audience: process.env.REACT_APP_AUTH0_AUDIENCE,
-              });
-            console.log(accessToken)
-			const res = await axios.get(`${process.env.REACT_APP_SERVER}/users`, {headers:{Authorization:`Bearer ${accessToken}`
-        }});
+				audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+			});
+			const res = await axios.get(`${process.env.REACT_APP_SERVER}/users`, {
+				headers: { Authorization: `Bearer ${accessToken}` },
+			});
 			const usersData = res.data.map((u: User) => {});
 			setUsers(res.data);
 		} catch (error: any) {
 			setError(error?.message || 'Unable to fetch users.');
 		}
+		setIsLoading(false);
 	};
 
 	useEffect(() => {
-
-					getUsers();
-		
+		getUsers();
 	}, []);
 
 	const deleteUser = async (id: string) => {
-        const token = await getAccessTokenSilently({
-            audience: process.env.REACT_APP_AUTH0_AUDIENCE,
-          });
+		const accessToken = await getAccessTokenSilently({
+			audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+		});
 		const res = await axios.get(
-			`${process.env.REACT_APP_SERVER}/users/${id}/delete`
+			`${process.env.REACT_APP_SERVER}/users/${id}/delete`,
+			{ headers: { Authorization: `Bearer ${accessToken}` } }
 		);
 		getUsers();
 		return res.data;
 	};
-    
+	const blockUser = async (id: string, block: boolean) => {
+		const accessToken = await getAccessTokenSilently({
+			audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+		});
+		const res = await axios.patch(
+			`${process.env.REACT_APP_SERVER}/users/${id}`,
+			{ blocked: block },
+			{ headers: { Authorization: `Bearer ${accessToken}` } }
+		);
+		getUsers();
+	};
 
 	return (
 		<section>
 			<h1 className="text-center">{t('user_management')}</h1>
-			<UsersTable users={users} onDeleteUser={deleteUser} />
+			{isLoading && <p>Fetching user data...</p>}
+			{!isLoading && error && <p>{error}</p>}
+			{!isLoading && !error && (
+				<UsersTable
+					users={users}
+					onDeleteUser={deleteUser}
+					onBlockUser={blockUser}
+				/>
+			)}
 		</section>
 	);
 };
