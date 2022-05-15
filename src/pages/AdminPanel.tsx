@@ -57,6 +57,17 @@ const AdminPanel = () => {
 		);
 		getUsers();
 	};
+	const assignRoles = async (id: string, roles: string[]) => {
+		const accessToken = await getAccessTokenSilently({
+			audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+		});
+		const res = await axios.post(
+			`${process.env.REACT_APP_SERVER}/users/${id}/roles`,
+			{ roles: roles },
+			{ headers: { Authorization: `Bearer ${accessToken}` } }
+		);
+		getUsers();
+	};
 
 	return (
 		<section>
@@ -68,6 +79,7 @@ const AdminPanel = () => {
 					users={users}
 					onDeleteUser={deleteUser}
 					onBlockUser={blockUser}
+					onAssignRoles = {assignRoles}
 				/>
 			)}
 		</section>

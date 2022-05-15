@@ -8,6 +8,7 @@ const UsersTable: React.FC<{
 	users: User[];
 	onDeleteUser: (id: string) => void;
 	onBlockUser: (id: string, block: boolean) => void;
+	onAssignRoles: (id: string, roles:string[]) => void;
 }> = (props) => {
 	const themeContext = useContext(ThemeContext);
 
@@ -69,6 +70,7 @@ const UsersTable: React.FC<{
 									<Button
 										className={classes['actions-button']}
 										variant="btn-link"
+                                        onClick={props.onAssignRoles.bind(null, u['user_id'], ['rol_E0jr35p4mJfEDK8m'])}
 									>
 										Modify roles
 									</Button>
