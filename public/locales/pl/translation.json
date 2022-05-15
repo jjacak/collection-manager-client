@@ -12,5 +12,16 @@
     "sign_up":"Zarejestruj się",
     "account_details": "Informacje szczegółowe",
 	"name":"Nazwa",
-    "user_management":"Zarządzaj Użytkownikami"
+    "user_management":"Zarządzaj Użytkownikami",
+    "roles":"Role",
+    "last_login": "Ostatnie logowanie",
+    "actions": "Opcje",
+    "active": "Aktywny",
+    "blocked":"Zablokowany",
+    "delete": "Usuń",
+    "block": "Zablokuj",
+    "promote_user":"Przyznaj uprawnienia admina",
+    "downgrade_user":"Odbierz uprawnienia admina",
+    "unblock":"Odblokuj"
+
 }

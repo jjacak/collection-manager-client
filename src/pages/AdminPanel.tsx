@@ -57,17 +57,30 @@ const AdminPanel = () => {
 		);
 		getUsers();
 	};
-	const assignRoles = async (id: string, roles: string[]) => {
+	const updateMetadata = async (id:string, roleName:string[]|null)=>{
+		const accessToken = await getAccessTokenSilently({
+			audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+		});
+		const res = await axios.patch(
+			`${process.env.REACT_APP_SERVER}/users/${id}/metadata`,
+			{ roles: roleName},
+			{ headers: { Authorization: `Bearer ${accessToken}` } }
+		);
+	}
+	const updateRoles = async (id: string, roles: string[], removeRole:boolean) => {
+
+		const url = removeRole? `${process.env.REACT_APP_SERVER}/users/${id}/deleteroles`:`${process.env.REACT_APP_SERVER}/users/${id}/roles`
 		const accessToken = await getAccessTokenSilently({
 			audience: process.env.REACT_APP_AUTH0_AUDIENCE,
 		});
 		const res = await axios.post(
-			`${process.env.REACT_APP_SERVER}/users/${id}/roles`,
+			url,
 			{ roles: roles },
 			{ headers: { Authorization: `Bearer ${accessToken}` } }
 		);
 		getUsers();
 	};
+
 
 	return (
 		<section>
@@ -79,7 +92,8 @@ const AdminPanel = () => {
 					users={users}
 					onDeleteUser={deleteUser}
 					onBlockUser={blockUser}
-					onAssignRoles = {assignRoles}
+					onUpdateRoles = {updateRoles}
+					onUpdateMetadata = {updateMetadata}
 				/>
 			)}
 		</section>

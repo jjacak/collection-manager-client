@@ -3,14 +3,27 @@ import { ThemeContext } from '../store/theme-context';
 import { Table, ButtonGroup, Button } from 'react-bootstrap';
 import { User } from '@auth0/auth0-react';
 import classes from './UsersTable.module.css';
+import { useTranslation } from 'react-i18next';
 
 const UsersTable: React.FC<{
 	users: User[];
 	onDeleteUser: (id: string) => void;
 	onBlockUser: (id: string, block: boolean) => void;
-	onAssignRoles: (id: string, roles:string[]) => void;
+	onUpdateRoles: (id: string, roles: string[], removeRole: boolean) => void;
+	onUpdateMetadata: (id: string, roleName: string[] | null) => void;
 }> = (props) => {
 	const themeContext = useContext(ThemeContext);
+	const { t } = useTranslation();
+
+	const assignRole = (
+		id: string,
+		roles: string[],
+		roleName: string[] | null,
+		removeRole: boolean
+	) => {
+		props.onUpdateRoles(id, roles, removeRole);
+		props.onUpdateMetadata(id, roleName);
+	};
 
 	return (
 		<Table
@@ -23,12 +36,12 @@ const UsersTable: React.FC<{
 			<thead>
 				<tr>
 					<th>Id</th>
-					<th>Name</th>
+					<th>{t("name")}</th>
 					<th>Email</th>
-					<th>Roles</th>
-					<th>Last login</th>
+					<th>{t("roles")}</th>
+					<th>{t("last_login")}</th>
 					<th>Status</th>
-					<th>Actions</th>
+					<th>{t("actions")}</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -36,9 +49,9 @@ const UsersTable: React.FC<{
 					const role =
 						u['app_metadata'] &&
 						u['app_metadata'].roles &&
-						u['app_metadata'].roles.includes('admin')
-							? 'Admin'
-							: 'User';
+						u['app_metadata'].roles.length > 0
+							? u['app_metadata'].roles
+							: 'user';
 					const isBlocked = u.blocked;
 					return (
 						<tr key={u['user_id']}>
@@ -47,7 +60,7 @@ const UsersTable: React.FC<{
 							<td>{u.email}</td>
 							<td>{role}</td>
 							<td>{u['last_login'].slice(0, 10)}</td>
-							<td>{isBlocked ? 'Blocked' : 'Active'}</td>
+							<td>{isBlocked ? t("blocked") : t("active")}</td>
 							<td>
 								<ButtonGroup
 									aria-label="User actions"
@@ -58,22 +71,49 @@ const UsersTable: React.FC<{
 										variant="btn-link"
 										onClick={props.onDeleteUser.bind(null, u['user_id'])}
 									>
-										Delete
+										{t("delete")}
 									</Button>
 									<Button
 										className={classes['actions-button']}
 										variant="btn-link"
-										onClick={props.onBlockUser.bind(null, u['user_id'], !isBlocked)}
+										onClick={props.onBlockUser.bind(
+											null,
+											u['user_id'],
+											!isBlocked
+										)}
 									>
-										{isBlocked ? 'Unblock' : 'Block'}
+										{isBlocked ? t("unblock") : t("block")}
 									</Button>
-									<Button
-										className={classes['actions-button']}
-										variant="btn-link"
-                                        onClick={props.onAssignRoles.bind(null, u['user_id'], ['rol_E0jr35p4mJfEDK8m'])}
-									>
-										Modify roles
-									</Button>
+									{!role.includes('admin') && (
+										<Button
+											className={classes['actions-button']}
+											variant="btn-link"
+											onClick={assignRole.bind(
+												null,
+												u['user_id'],
+												['rol_E0jr35p4mJfEDK8m'],
+												['admin'],
+												false
+											)}
+										>
+											{t("promote_user")}
+										</Button>
+									)}
+									{role.includes('admin') && (
+										<Button
+											className={classes['actions-button']}
+											variant="btn-link"
+											onClick={assignRole.bind(
+												null,
+												u['user_id'],
+												['rol_E0jr35p4mJfEDK8m'],
+												[],
+												true
+											)}
+										>
+											{t("downgrade_user")}
+										</Button>
+									)}
 								</ButtonGroup>
 							</td>
 						</tr>

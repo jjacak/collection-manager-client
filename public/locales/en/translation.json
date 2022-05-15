@@ -12,5 +12,15 @@
 	"sign_up": "Sign up",
 	"account_details": "Account details",
 	"name":"Name",
-	"user_management":"User Management"
+	"user_management":"User Management",
+	"roles":"Roles",
+	"last_login": "Last login",
+	"actions": "Actions",
+	"active": "Active",
+    "blocked":"Blocked",
+	"delete":"Delete",
+	"block": "Block",
+    "promote_user":"Promote to admin",
+    "downgrade_user":"Downgrade",
+	"unblock": "Unblock"
 }
