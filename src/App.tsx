@@ -6,11 +6,11 @@ import SideNavbar from './components/SideNavbar';
 import { Route, Routes } from 'react-router-dom';
 import Content from './UI/Content';
 import { RoleProtectedRoute } from './auth/role-protected-route';
-import Profile from './pages/Profile';
 import Dashboard from './pages/Dashboard';
 import NotFound from './pages/NotFound';
 import AdminPanel from './pages/AdminPanel';
 import { ThemeContext } from './store/theme-context';
+import ViewUser from './pages/ViewUser';
 
 function App() {
 	const themeContext = useContext(ThemeContext);
@@ -27,12 +27,18 @@ function App() {
 						<Route path="/" element={<Dashboard />} />
 						<Route
 							path="/profile"
-							element={<RoleProtectedRoute component={Profile} />}
+							element={<RoleProtectedRoute component={ViewUser} />}
 						/>
 						<Route
 							path="admin"
 							element={
 								<RoleProtectedRoute role="admin" component={AdminPanel} />
+							}
+						/>
+						<Route
+							path="user-profile/:userId"
+							element={
+								<RoleProtectedRoute role="admin" component={ViewUser} />
 							}
 						/>
 

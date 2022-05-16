@@ -19,16 +19,3 @@
 	color: var(--text-primary);
 	border-color: var(--card-border);
 }
-
-/* @media (min-width: 550px) {
-	.profile .profile-card {
-		flex-direction: row;
-		align-items: center;
-		width: 600px;
-	}
-	.profile .profile-card img {
-		width: 40%;
-		border-top-right-radius: 0;
-		border-bottom-left-radius: calc(0.25rem - 1px);
-	}
-} */

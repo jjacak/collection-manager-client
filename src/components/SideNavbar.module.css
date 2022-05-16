@@ -1,8 +1,8 @@
 .side-navbar {
-    position: fixed;
-    top: 40px;
-    left: 0;
-    z-index: 100;
+	position: fixed;
+	top: 40px;
+	left: 0;
+	z-index: 100;
 }
 
 .toggle {
@@ -20,11 +20,11 @@
 	padding: 10px 2px;
 	cursor: pointer;
 	transition: left 0.3s;
-    outline: none;
- 
+	outline: none;
 }
-.toggle:active, .toggle:focus {
-    color: var(--accent);
+.toggle:active,
+.toggle:focus {
+	color: var(--accent);
 }
 .toggle::after {
 	content: '';
@@ -36,9 +36,8 @@
 	background: var(--components-background);
 	transform: rotate(45deg);
 	border-radius: 8px;
-    z-index: -1;
+	z-index: -1;
 }
 .toggle.expanded {
 	left: calc(270px - 28px);
 }
-

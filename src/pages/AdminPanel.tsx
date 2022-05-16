@@ -4,6 +4,7 @@ import axios from 'axios';
 import { User, IdToken } from '@auth0/auth0-react';
 import UsersTable from '../components/UsersTable';
 import { useAuth0 } from '@auth0/auth0-react';
+import { Link } from 'react-router-dom';
 
 const AdminPanel = () => {
 	const { t } = useTranslation();
@@ -26,7 +27,7 @@ const AdminPanel = () => {
 			const usersData = res.data.map((u: User) => {});
 			setUsers(res.data);
 		} catch (error: any) {
-			setError(error?.message || 'Unable to fetch users.');
+			setError(error.message || 'Unable to fetch users.');
 		}
 		setIsLoading(false);
 	};
