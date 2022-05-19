@@ -9,11 +9,7 @@ import { useState } from 'react';
 import classes from './AddCollection.module.css';
 import { useTranslation } from 'react-i18next';
 
-const schema = yup.object().shape({
-	title: yup.string().required('This field is required'),
-	topic: yup.string().required('Please, choose a topic'),
-	description: yup.string().required('Please, add a description.'),
-});
+
 const tagsOptions = [
 	{ label: 'wine', value: 'wine' },
 	{ label: 'fantasy', value: 'fantasy' },
@@ -23,6 +19,12 @@ const AddCollection = () => {
 	const [selectedTags, setSelectedTags] = useState([]);
 	const [uploadedImage, setUploadedImage] = useState<File | null>(null);
 	const { t } = useTranslation();
+
+	const schema = yup.object().shape({
+		title: yup.string().required(`${t("field_required")}`),
+		topic: yup.string().required(`${t("field_required")}`),
+		description: yup.string().required(`${t("field_required")}`),
+	});
 
 	return (
 		<section>
