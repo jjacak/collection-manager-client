@@ -11,6 +11,7 @@ import NotFound from './pages/NotFound';
 import AdminPanel from './pages/AdminPanel';
 import { ThemeContext } from './store/theme-context';
 import ViewUser from './pages/ViewUser';
+import AddCollection from './pages/AddCollection';
 
 function App() {
 	const themeContext = useContext(ThemeContext);
@@ -28,6 +29,10 @@ function App() {
 						<Route
 							path="/profile"
 							element={<RoleProtectedRoute component={ViewUser} />}
+						/>
+						<Route
+							path="/add-collection"
+							element={<RoleProtectedRoute component={AddCollection} />}
 						/>
 						<Route
 							path="admin"

@@ -22,6 +22,21 @@
     "block": "Zablokuj",
     "promote_user":"Przyznaj uprawnienia admina",
     "downgrade_user":"Odbierz uprawnienia admina",
-    "unblock":"Odblokuj"
+    "unblock":"Odblokuj",
+    "users_collections":"Kolekcje użytkownika",
+	"no_collections":"Ten użytkownik nie dodał jeszcze żadnych kolekcji.",
+    "profile":"Profil",
+    "add_collection":"Dodaj Kolekcję",
+    "create_collection":"Utwórz Kolekcję",
+	"title":"Tytuł Kolekcji:",
+	"topic":"Temat Kolekcji:",
+	"description":"Opis Kolekcji:",
+	"tags":"Tagi (opcjonalnie):",
+	"image":"Okładka (opcjonanie):",
+	"field_required":"To pole jest wymagane.",
+    "coins":"Monety",
+    "alcohols":"Alkohole",
+    "books":"Książki",
+    "music_albums":"Albumy muzyczne"
 
 }

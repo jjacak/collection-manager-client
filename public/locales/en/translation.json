@@ -22,5 +22,21 @@
 	"block": "Block",
     "promote_user":"Promote to admin",
     "downgrade_user":"Downgrade",
-	"unblock": "Unblock"
+	"unblock": "Unblock",
+	"users_collections":"Users's collections",
+	"no_collections":"This user hasn't added any collections yet.",
+	"profile":"Profile",
+	"add_collection":"Add Collection",
+	"create_collection":"Create Collection",
+	"title":"Collection Title:",
+	"topic":"Collection Topic:",
+	"description":"Collection Description:",
+	"tags":"Tags (optional):",
+	"image":"Cover Image (optional):",
+	"field_required":"This field is required.",
+	"coins":"Coins",
+    "alcohols":"Alcohols",
+    "books":"Books",
+    "music_albums":"Music albums"
+
 }
