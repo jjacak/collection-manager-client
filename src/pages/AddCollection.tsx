@@ -8,7 +8,9 @@ import { MultiSelect } from 'react-multi-select-component';
 import { useState } from 'react';
 import classes from './AddCollection.module.css';
 import { useTranslation } from 'react-i18next';
-
+import axios from 'axios';
+import { useAuth0 } from '@auth0/auth0-react';
+import { useNavigate } from 'react-router-dom';
 
 const tagsOptions = [
 	{ label: 'wine', value: 'wine' },
@@ -16,26 +18,60 @@ const tagsOptions = [
 	{ label: '2000', value: '2000' },
 ];
 const AddCollection = () => {
-	const [selectedTags, setSelectedTags] = useState([]);
+	const [selectedTags, setSelectedTags] = useState<
+		{ label: string; value: string }[]
+	>([]);
 	const [uploadedImage, setUploadedImage] = useState<File | null>(null);
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState<any|null>(null);
 	const { t } = useTranslation();
+	const { user, getAccessTokenSilently } = useAuth0();
+	const navigate = useNavigate();
 
 	const schema = yup.object().shape({
-		title: yup.string().required(`${t("field_required")}`),
-		topic: yup.string().required(`${t("field_required")}`),
-		description: yup.string().required(`${t("field_required")}`),
+		title: yup.string().required(`${t('field_required')}`),
+		topic: yup.string().required(`${t('field_required')}`),
+		description: yup.string().required(`${t('field_required')}`),
 	});
 
 	return (
 		<section>
-			<h1 className="text-center">{t("create_collection")}</h1>
+			<h1 className="text-center">{t('create_collection')}</h1>
 
 			<Formik
 				validationSchema={schema}
-				onSubmit={(val) => {
-					console.log(selectedTags);
-					console.log(val);
-					console.log(uploadedImage);
+				onSubmit={async (val) => {
+					try {
+						setIsLoading(true);
+						setError(null);
+						const tags = selectedTags.map((t) => t.value);
+						const data = {
+							...val,
+							tags: tags,
+							image: uploadedImage,
+							owner_id: user!.sub,
+						};
+						console.log(data);
+						const accessToken = await getAccessTokenSilently({
+							audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+						});
+						const res = await axios.post(
+							`${process.env.REACT_APP_SERVER}/create-collection`,
+							data,
+							{
+								headers: {
+									Authorization: `Bearer ${accessToken}`,
+									'Content-Type': 'multipart/form-data',
+								},
+							}
+						);
+						console.log('response:', res);
+						navigate('/profile');
+					} catch (error) {
+						setError(error)
+					}
+					setIsLoading(false);
+					
 				}}
 				initialValues={{
 					title: '',
@@ -53,24 +89,20 @@ const AddCollection = () => {
 						noValidate
 						onSubmit={handleSubmit}
 					>
+						<Field label={t('title')} name="title" component={TextFormField} />
 						<Field
-							label={t("title")}
-							name="title"
-							component={TextFormField}
-						/>
-						<Field
-							label={t("topic")}
+							label={t('topic')}
 							name="topic"
 							options={[
-								{ label: `${t("coins")}`, value: 'coins' },
-								{ label: `${t("alcohols")}`, value: 'alcohols' },
-								{ label: `${t("books")}`, value: 'books' },
-								{ label: `${t("music_albums")}`, value: 'music-albums' },
+								{ label: `${t('coins')}`, value: 'coins' },
+								{ label: `${t('alcohols')}`, value: 'alcohols' },
+								{ label: `${t('books')}`, value: 'books' },
+								{ label: `${t('music_albums')}`, value: 'music-albums' },
 							]}
 							component={SelectFormField}
 						/>
 						<Field
-							label={t("description")}
+							label={t('description')}
 							name="description"
 							istextarea="true"
 							rows={4}
@@ -78,7 +110,7 @@ const AddCollection = () => {
 						/>
 
 						<Form.Group className="mb-3">
-							<Form.Label htmlFor="autocomplete">{t("tags")}</Form.Label>
+							<Form.Label htmlFor="autocomplete">{t('tags')}</Form.Label>
 							<MultiSelect
 								className={classes.autocomplete}
 								options={tagsOptions}
@@ -90,7 +122,7 @@ const AddCollection = () => {
 							/>
 						</Form.Group>
 						<Form.Group className="mb-3">
-							<Form.Label htmlFor="image">{t("image")}</Form.Label>
+							<Form.Label htmlFor="image">{t('image')}</Form.Label>
 							<Form.Control
 								id="image"
 								name="image"
@@ -103,9 +135,10 @@ const AddCollection = () => {
 						</Form.Group>
 						<div className="mt-3 d-flex justify-content-center justify-content-sm-end">
 							<Button type="submit" className="button">
-								{t("create_collection")}
+								{isLoading ? `${t('sending')}...` : `${t('create_collection')}`}
 							</Button>
 						</div>
+						{error && <p className='text-danger'>{error.response.data.msg}</p>}
 					</Form>
 				)}
 			</Formik>

@@ -1,10 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { User, IdToken } from '@auth0/auth0-react';
+import { User} from '@auth0/auth0-react';
 import UsersTable from '../components/UsersTable';
 import { useAuth0 } from '@auth0/auth0-react';
-import { Link } from 'react-router-dom';
 
 const AdminPanel = () => {
 	const { t } = useTranslation();
@@ -12,7 +11,6 @@ const AdminPanel = () => {
 	const [error, setError] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const { getAccessTokenSilently } = useAuth0();
-	console.log(users);
 
 	const getUsers = async () => {
 		setIsLoading(true);

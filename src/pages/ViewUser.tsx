@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import UserInfo from '../components/UserInfo';
-import { NavLink } from 'react-router-dom';
+import UsersCollections from '../components/UsersCollections';
 
 const ViewUser: React.FC = () => {
 	const { user, isAuthenticated, isLoading, getAccessTokenSilently } =
@@ -13,7 +13,7 @@ const ViewUser: React.FC = () => {
 	const [viewedUser, setViewedUser] = useState<User | undefined>();
 	const [isFetching, setIsFetching] = useState(false);
 	const [error, setError] = useState(null);
-	const [collections, setCollections] = useState(null);
+	
 
 	const { userId } = useParams();
 
@@ -57,17 +57,8 @@ const ViewUser: React.FC = () => {
 		return (
 			<section >
                 <UserInfo viewedUser={viewedUser}/>
-				<article>
-					<h2 className="my-4 text-center">{t("users_collections")}:</h2>
-					{!collections && (
-						<p className="text-center">
-							{t("no_collections")}
-						</p>
-					)}
-					<div className='d-flex justify-content-center'>
-					{window.location.pathname === '/profile' && <NavLink className = 'btn' style={{background:"var(--accent)", color:'var(--text-primary)'}} to='/add-collection'>{t("add_collection")}</NavLink>}
-					</div>
-				</article>
+				<UsersCollections/>
+			
 			</section>
 		);
 	}
