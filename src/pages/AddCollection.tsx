@@ -62,7 +62,6 @@ const AddCollection = () => {
 								headers: {
 									Authorization: `Bearer ${accessToken}`,
 									'Content-Type': 'multipart/form-data',
-									'Access-Control-Allow-Origin':`${process.env.REACT_APP_SERVER}`
 								},
 							}
 						);

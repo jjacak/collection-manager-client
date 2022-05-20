@@ -13,6 +13,7 @@ import { ThemeContext } from './store/theme-context';
 import ViewUser from './pages/ViewUser';
 import AddCollection from './pages/AddCollection';
 import MyProfile from './pages/MyProfile';
+import ViewCollection from './pages/ViewCollection';
 
 function App() {
 	const themeContext = useContext(ThemeContext);
@@ -45,6 +46,12 @@ function App() {
 							path="user-profile/:userId"
 							element={
 								<RoleProtectedRoute role="admin" component={ViewUser} />
+							}
+						/>
+						<Route
+							path="view-collection/:id"
+							element={
+								<RoleProtectedRoute component={ViewCollection} />
 							}
 						/>
 

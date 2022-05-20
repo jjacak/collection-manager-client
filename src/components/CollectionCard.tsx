@@ -30,7 +30,7 @@ const CollectionCard: React.FC<{ collection: CollectionInterface }> = (
                 })}
 				</Card.Text>
 
-				<Button className="button">View Collection</Button>
+				<NavLink to={`/view-collection/${collection['_id']}`} className="btn" style={{color:'var(--text-primary)', backgroundColor:'var(--accent)'}}>View Collection</NavLink>
 			</Card.Body>
 		</Card>
 	);
