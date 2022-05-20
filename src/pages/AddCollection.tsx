@@ -62,6 +62,7 @@ const AddCollection = () => {
 								headers: {
 									Authorization: `Bearer ${accessToken}`,
 									'Content-Type': 'multipart/form-data',
+									'Access-Control-Allow-Origin':`${process.env.REACT_APP_SERVER}`
 								},
 							}
 						);
@@ -138,7 +139,7 @@ const AddCollection = () => {
 								{isLoading ? `${t('sending')}...` : `${t('create_collection')}`}
 							</Button>
 						</div>
-						{error && <p className='text-danger'>{error.response.data.msg}</p>}
+						{error && <p className='text-danger'>{error?.response.data?.msg || 'Sorry, something went wrong.'}</p>}
 					</Form>
 				)}
 			</Formik>
