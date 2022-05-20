@@ -47,7 +47,7 @@ const AddCollection = () => {
 						const tags = selectedTags.map((t) => t.value);
 						const data = {
 							...val,
-							tags: tags,
+							tags: JSON.stringify(tags),
 							image: uploadedImage,
 							owner_id: user!.sub,
 						};

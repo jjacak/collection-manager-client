@@ -12,6 +12,7 @@ import AdminPanel from './pages/AdminPanel';
 import { ThemeContext } from './store/theme-context';
 import ViewUser from './pages/ViewUser';
 import AddCollection from './pages/AddCollection';
+import MyProfile from './pages/MyProfile';
 
 function App() {
 	const themeContext = useContext(ThemeContext);
@@ -28,7 +29,7 @@ function App() {
 						<Route path="/" element={<Dashboard />} />
 						<Route
 							path="/profile"
-							element={<RoleProtectedRoute component={ViewUser} />}
+							element={<RoleProtectedRoute component={MyProfile} />}
 						/>
 						<Route
 							path="/add-collection"

@@ -1,17 +1,33 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
+import axios from 'axios';
+import CollectionCard from './CollectionCard';
 
-const UsersCollections = () => {
-	const [collections, setCollections] = useState(null);
+const UsersCollections: React.FC<{ id: string }> = (props) => {
+	const [collections, setCollections] = useState([]);
+	const [error, setError] = useState<any|null>(null);
 	const { t } = useTranslation();
 
+	useEffect(() => {
+		const fetchCollections = async () => {
+			try {
+				const response = await axios.get(
+					`${process.env.REACT_APP_SERVER}/get-collections/${props.id}`
+				);
+				setCollections(response.data);
+			} catch (error) {
+				setError(error)
+			}
+		};
+		fetchCollections();
+	}, []);
 	return (
 		<article>
 			<h2 className="my-4 text-center">{t('users_collections')}:</h2>
-			{!collections && <p className="text-center">{t('no_collections')}</p>}
+            {error && <p className='text-danger'>{error.message}</p>}
+			{!collections.length && <p className="text-center">{t('no_collections')}</p>}
 			<div className="d-flex justify-content-center">
-				{window.location.pathname === '/profile' && (
 					<NavLink
 						className="btn"
 						style={{
@@ -22,8 +38,12 @@ const UsersCollections = () => {
 					>
 						{t('add_collection')}
 					</NavLink>
-				)}
 			</div>
+            <div className='row justify-content-center mt-3'>
+                    {collections.map(c=>{
+                            return <CollectionCard key={c['_id']} collection={c}/>
+                        })}
+                    </div>
 		</article>
 	);
 };

@@ -13,15 +13,9 @@ const ViewUser: React.FC = () => {
 	const [viewedUser, setViewedUser] = useState<User | undefined>();
 	const [isFetching, setIsFetching] = useState(false);
 	const [error, setError] = useState(null);
-	
-
 	const { userId } = useParams();
 
 	useEffect(() => {
-		if (window.location.pathname === '/profile') {
-			setViewedUser(user);
-			return;
-		}
 		const getUser = async () => {
 			setIsFetching(true);
 			setError(null);
@@ -42,10 +36,10 @@ const ViewUser: React.FC = () => {
 			setIsFetching(false);
 		};
 		getUser();
-	}, [user]);
+	}, []);
 
 	if (isLoading || isFetching) {
-		return <div>Loading ...</div>;
+		return <div>{t("loading")}...</div>;
 	}
     if(error){
         return <p>{error}</p>
@@ -57,7 +51,7 @@ const ViewUser: React.FC = () => {
 		return (
 			<section >
                 <UserInfo viewedUser={viewedUser}/>
-				<UsersCollections/>
+				<UsersCollections id = {`${viewedUser?.user_id}`}/>
 			
 			</section>
 		);
@@ -67,5 +61,4 @@ const ViewUser: React.FC = () => {
 
 export default ViewUser;
 
-//move collections to separate component
 
