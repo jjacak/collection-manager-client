@@ -83,7 +83,7 @@ const AdminPanel = () => {
 
 	return (
 		<section>
-			<h1 className="text-center mb-5">{t('user_management')}</h1>
+			<h1 className="text-center mb-4 bg-warning">{t('user_management')}</h1>
 			{isLoading && <p>Fetching user data...</p>}
 			{!isLoading && error && <p>{error}</p>}
 			{!isLoading && !error && (

@@ -8,7 +8,7 @@ const UserInfo: React.FC<{ viewedUser: User | undefined }> = (props) => {
 	const { t } = useTranslation();
 	return (
 		<article className={classes.profile}>
-			<h1 className="text-center mb-5">{t("profile")}</h1>
+			<h1 className="text-center mb-4 bg-warning">{t("profile")}</h1>
 			<img
 				className={classes.img}
 				src={props.viewedUser?.picture}

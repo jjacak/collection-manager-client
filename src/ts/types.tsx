@@ -12,6 +12,7 @@ export interface CollectionItem {
 
 export interface CollectionInterface {
 	owner_id: string;
+	owner_name?: string;
 	tags?: string[];
 	title: string;
 	image?: string;
@@ -21,3 +22,4 @@ export interface CollectionInterface {
 	items?: CollectionItem[];
 	_id:string
 }
+

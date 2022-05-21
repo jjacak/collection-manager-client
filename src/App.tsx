@@ -14,6 +14,7 @@ import ViewUser from './pages/ViewUser';
 import AddCollection from './pages/AddCollection';
 import MyProfile from './pages/MyProfile';
 import ViewCollection from './pages/ViewCollection';
+import AddItem from './pages/AddItem';
 
 function App() {
 	const themeContext = useContext(ThemeContext);
@@ -52,6 +53,12 @@ function App() {
 							path="view-collection/:id"
 							element={
 								<RoleProtectedRoute component={ViewCollection} />
+							}
+						/>
+							<Route
+							path="add-item/:id"
+							element={
+								<RoleProtectedRoute component={AddItem} />
 							}
 						/>
 

@@ -12,7 +12,7 @@ const CollectionCard: React.FC<{ collection: CollectionInterface }> = (
 	return (
 		<Card className = 'm-2 p-0'
 			style={{
-				width: '200px',
+				width: '220px',
 				backgroundColor: 'var(--background)',
 				borderColor: ' var(--card-border)',
 			}}

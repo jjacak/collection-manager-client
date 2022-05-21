@@ -3,7 +3,7 @@ import { FieldProps, getIn, ErrorMessage } from "formik";
 import React from "react";
 
 
-const TextFormField: React.FC<FieldProps&{label?:string}> = ({
+const Textarea: React.FC<FieldProps&{label?:string}> = ({
   field,
   form,
   ...props
@@ -18,7 +18,7 @@ const TextFormField: React.FC<FieldProps&{label?:string}> = ({
 						  {...field}
               {...props}
               isInvalid={!!errorText}
-             
+              as='textarea'
              
 						/>
 						<ErrorMessage name={field.name} />
@@ -26,4 +26,4 @@ const TextFormField: React.FC<FieldProps&{label?:string}> = ({
   );
 };
 
-export default TextFormField
+export default Textarea

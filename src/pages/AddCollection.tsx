@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
+import Textarea from '../UI/FormFields/Textarea';
 
 const tagsOptions = [
 	{ label: 'wine', value: 'wine' },
@@ -36,11 +37,12 @@ const AddCollection = () => {
 
 	return (
 		<section>
-			<h1 className="text-center">{t('create_collection')}</h1>
+			<h1 className="text-center mb-4 bg-warning">{t('create_collection')}</h1>
 
 			<Formik
 				validationSchema={schema}
 				onSubmit={async (val) => {
+					console.log(schema)
 					try {
 						setIsLoading(true);
 						setError(null);
@@ -50,6 +52,7 @@ const AddCollection = () => {
 							tags: JSON.stringify(tags),
 							image: uploadedImage,
 							owner_id: user!.sub,
+							owner_name:user!.nickname
 						};
 						console.log(data);
 						const accessToken = await getAccessTokenSilently({
@@ -104,9 +107,8 @@ const AddCollection = () => {
 						<Field
 							label={t('description')}
 							name="description"
-							istextarea="true"
 							rows={4}
-							component={TextFormField}
+							component={Textarea}
 						/>
 
 						<Form.Group className="mb-3">
@@ -138,7 +140,7 @@ const AddCollection = () => {
 								{isLoading ? `${t('sending')}...` : `${t('create_collection')}`}
 							</Button>
 						</div>
-						{error && <p className='text-danger'>{error?.response.data?.msg || 'Sorry, something went wrong.'}</p>}
+						{error && <p className='text-danger'>{error?.response?.data?.msg || 'Sorry, something went wrong!'}</p>}
 					</Form>
 				)}
 			</Formik>
