@@ -21,7 +21,6 @@ type initialValuesType = {
 type formDataType = {
 	[key: string]: { value: string; label: string; type: string };
 };
-let initialValues: initialValuesType = {};
 
 const AddItemForm = () => {
 	const tagsRef = useRef<any>();
@@ -70,15 +69,17 @@ const AddItemForm = () => {
 		setFormFields(updatedFields);
 		setIsModalOpen(false);
 	};
+
+    let initialValues: initialValuesType = {};
 	formFields.forEach((item) => {
 		initialValues[item.name] = '';
 	});
-
+console.log(error)
 	return (
 		<>
 			<Formik
 				validationSchema={schema}
-				onSubmit={async (values) => {
+				onSubmit={async (values, {resetForm}) => {
 					setError(null);
 					setIsLoading(true);
 					try {
@@ -89,6 +90,7 @@ const AddItemForm = () => {
 
 						for (let [key, value] of Object.entries(values)) {
 							const currentField = formFields.filter((f) => f.name === key)[0];
+        
 							formData[key] = {
 								value: value,
 								label: currentField.label,
@@ -110,6 +112,7 @@ const AddItemForm = () => {
 								},
 							}
 						);
+                        resetForm()
                         navigate(`/view-collection/${id}`)
 					} catch (error: any) {
 						setError(error);

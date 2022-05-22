@@ -85,8 +85,8 @@ const ViewCollection = () => {
 				{!collection?.items?.length && (
 					<p className="text-center">{t('no_items')}</p>
 				)}
-				{tableData && <CollectionTable items={tableData} />}
-			{/* <CollectionTable items={[{_id:'sdfghj', name:'tiotrek', date:'today'},{_id:'sdfddhj', name:'piotrek', date:'today'}]} /> */}
+				{tableData && tableData.length>0 && <CollectionTable items={tableData} />}
+
 			</section>
 		</main>
 	);
