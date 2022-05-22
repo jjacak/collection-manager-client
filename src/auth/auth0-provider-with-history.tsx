@@ -20,7 +20,7 @@ const Auth0ProviderWithHistory:React.FC<propsChildren> = (props) => {
       clientId={clientId}
       redirectUri={window.location.origin}
       onRedirectCallback={onRedirectCallback}
-      // audience={audience}
+      audience={audience}
     >
       {props.children}
     </Auth0Provider>
