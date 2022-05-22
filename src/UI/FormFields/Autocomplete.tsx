@@ -1,6 +1,5 @@
 import { useState, forwardRef, useImperativeHandle, Ref } from 'react';
 import { MultiSelect } from 'react-multi-select-component';
-import { Form } from 'react-bootstrap';
 
 const options = [
 	{ label: 'wine', value: 'wine' },
