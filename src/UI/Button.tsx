@@ -13,7 +13,6 @@ const Button: React.FC<ButtonProps> = (props: ButtonProps) => {
 			onClick={props.onClick}
 			type={props.type || 'button'}
 			className={`${classes[props.className]}`}
-			// className={`${classes.button} ${classes[props.className]}`}
 		>
 			{props.children}
 		</button>

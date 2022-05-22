@@ -1,5 +1,5 @@
 .button {
-	border: none;
+	border: 1px solid var(--accent);
 	background-color: var(--accent);
 	padding: 5px 10px;
 	border-radius: 5px;
@@ -12,4 +12,11 @@
 	padding: 5px 10px;
 	border-radius: 5px;
 	color: var(--text-primary);
+}
+.button--danger {
+	border: 1px solid rgb(195, 43, 43);
+	background-color: rgb(195, 43, 43);
+	padding: 5px 10px;
+	border-radius: 5px;
+    color: var(--text-primary);
 }
