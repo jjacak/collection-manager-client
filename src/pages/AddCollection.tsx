@@ -104,7 +104,7 @@ const AddCollection = () => {
 							component={Textarea}
 						/>
 
-						<Form.Group className="mb-3">
+						<Form.Group className="mb-3" style={{color:'var(--text-constant)'}}>
 							<Form.Label htmlFor="autocomplete">{t('tags')}</Form.Label>
 							<Autocomplete ref={tagsRef}/>
 						</Form.Group>
