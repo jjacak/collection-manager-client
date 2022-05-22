@@ -25,6 +25,8 @@ const ViewCollection = () => {
 		};
 		getCollection();
 	}, []);
+
+	console.log(collection)
 	return (
 		<main>
 			<section>
@@ -79,7 +81,7 @@ const ViewCollection = () => {
 
 				{!collection?.items!.length && (
 					<p className="text-center">
-						This collection doens't have any items yet.
+						{t("no_items")}
 					</p>
 				)}
 			</section>

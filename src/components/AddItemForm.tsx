@@ -9,30 +9,40 @@ import Textarea from '../UI/FormFields/Textarea';
 import YupSchemaGenerator from '../utils/YupSchemaGenerator';
 import CreateFieldModal from './CreateFieldModal';
 import { v4 as uuid } from 'uuid';
-import Autocomplete from '../UI/FormFields/Autocomplete';
+import Autocomplete, { TagsType } from '../UI/FormFields/Autocomplete';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useAuth0 } from '@auth0/auth0-react';
 
 type initialValuesType = {
 	[key: string]: string;
+};
+type formDataType = {
+	[key: string]: { value: string; label: string; type: string };
 };
 let initialValues: initialValuesType = {};
 
 const AddItemForm = () => {
 	const tagsRef = useRef<any>();
-    const { t } = useTranslation();
+	const { t } = useTranslation();
+	const { getAccessTokenSilently, user } = useAuth0();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState<any>(null);
 	const [formFields, setFormFields] = useState([
 		{
 			name: 'name',
-			label: `${t("item_name")}:`,
+			label: `${t('item_name')}:`,
 			type: 'text',
 			validationType: 'string',
-			validation: { type: 'required', params: `${t("field_required")}` },
+			validation: { type: 'required', params: `${t('field_required')}` },
 		},
 	]);
 	const yupSchema = formFields.reduce(YupSchemaGenerator, {});
 	const schema = yup.object().shape(yupSchema);
+	const { id } = useParams();
+	const navigate = useNavigate();
 
 	const showModal = () => {
 		setIsModalOpen(true);
@@ -68,9 +78,43 @@ const AddItemForm = () => {
 		<>
 			<Formik
 				validationSchema={schema}
-				onSubmit={(values) => {
-					console.log('SUBMIT', values);
-					console.log(tagsRef?.current?.getTags());
+				onSubmit={async (values) => {
+					setError(null);
+					setIsLoading(true);
+					try {
+						const tags = tagsRef.current
+							.getTags()
+							.map((t: TagsType) => t.value);
+						let formData: formDataType = {};
+
+						for (let [key, value] of Object.entries(values)) {
+							const currentField = formFields.filter((f) => f.name === key)[0];
+							formData[key] = {
+								value: value,
+								label: currentField.label,
+								type: currentField.type,
+							};
+						}
+
+						const data = { ...formData, tags: tags, author: user?.sub , date:new Date()};
+						const accessToken = await getAccessTokenSilently({
+							audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+						});
+
+						const response = await axios.post(
+							`${process.env.REACT_APP_SERVER}/add-item/${id}`,
+							data,
+							{
+								headers: {
+									Authorization: `Bearer ${accessToken}`,
+								},
+							}
+						);
+                        navigate(`/view-collection/${id}`)
+					} catch (error: any) {
+						setError(error);
+					}
+					setIsLoading(false);
 				}}
 				initialValues={initialValues}
 			>
@@ -84,7 +128,10 @@ const AddItemForm = () => {
 							maxWidth: '100%',
 						}}
 					>
-						<Form.Group className="mb-3" style={{color:'var(--text-constant)'}}>
+						<Form.Group
+							className="mb-3"
+							style={{ color: 'var(--text-constant)' }}
+						>
 							<Form.Label htmlFor="autocomplete">{t('tags')}</Form.Label>
 							<Autocomplete ref={tagsRef} />
 						</Form.Group>
@@ -106,14 +153,14 @@ const AddItemForm = () => {
 										<Form.Label>{f.label}</Form.Label>
 										<Field
 											component={Radio}
-											label={`${t("yes")}`}
+											label={`${t('yes')}`}
 											value="true"
 											name={f.name}
 											onChange={handleChange}
 										/>
 										<Field
 											component={Radio}
-											label={`${t("no")}`}
+											label={`${t('no')}`}
 											value="false"
 											name={f.name}
 											onChange={handleChange}
@@ -134,7 +181,7 @@ const AddItemForm = () => {
 						})}
 						<div className="text-center">
 							<Button className="button--alt" type="button" onClick={showModal}>
-								{t("add_field")}
+								{t('add_field')}
 							</Button>
 						</div>
 						<div className="my-4 text-center">
@@ -142,6 +189,11 @@ const AddItemForm = () => {
 								{isLoading ? `${t('sending')}...` : `${t('add_item')}`}
 							</Button>
 						</div>
+						{error && (
+							<p className="text-danger">
+								{error?.response?.data?.msg || 'Sorry, something went wrong!'}
+							</p>
+						)}
 					</Form>
 				)}
 			</Formik>

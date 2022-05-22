@@ -55,7 +55,8 @@
     "text_field":"Linijka tekstu",
     "text_area": "Pole tekstowe",
     "yes":"Tak",
-    "no":"Nie"
+    "no":"Nie",
+    "no_items":"Ta kolekcja nie ma jeszcze żadnych pozycji."
 
 
 

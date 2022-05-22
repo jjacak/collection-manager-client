@@ -55,7 +55,8 @@
     "text_field":"Text field",
     "text_area": "Multiline text field",
 	"yes":"Yes",
-    "no":"No"
+    "no":"No",
+	"no_items":"This collection doens't have any items yet."
 
 
 
