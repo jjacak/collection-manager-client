@@ -118,7 +118,7 @@ const AddItemForm = () => {
 				}}
 				initialValues={initialValues}
 			>
-				{({ handleSubmit, handleChange }) => (
+				{({ handleSubmit, handleChange, values }) => (
 					<Form
 						noValidate
 						onSubmit={handleSubmit}
@@ -144,6 +144,7 @@ const AddItemForm = () => {
 										label={f.label}
 										name={f.name}
 										component={Textarea}
+                                        value={values[f.name] || ''}
 									/>
 								);
 							}
@@ -176,6 +177,7 @@ const AddItemForm = () => {
 									type={f.type}
 									name={f.name}
 									component={TextFormField}
+                                    value={values[f.name] || ''}
 								/>
 							);
 						})}
