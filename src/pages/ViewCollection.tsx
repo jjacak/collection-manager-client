@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { CollectionInterface } from '../ts/types';
 import { Badge } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import CollectionTable from '../components/CollectionTable';
 
 const ViewCollection = () => {
 	const { id } = useParams();
@@ -26,7 +27,9 @@ const ViewCollection = () => {
 		getCollection();
 	}, []);
 
-	console.log(collection)
+
+	const tableData = collection?.items?.map(i=>{return {_id:i._id, name:i.name.value, date:i.date.toString().slice(0,10)}})
+	console.log(tableData);
 	return (
 		<main>
 			<section>
@@ -53,15 +56,15 @@ const ViewCollection = () => {
 					/>
 				)}
 				<p className="fs-4">
-					<span className="fw-bold">{t("author")}: </span>
+					<span className="fw-bold">{t('author')}: </span>
 					{collection?.owner_name}
 				</p>
 				<p className="fs-4">
-					<span className="fw-bold">{t("category")}: </span>
+					<span className="fw-bold">{t('category')}: </span>
 					{collection?.topic}
 				</p>
 				<p className="fs-4">
-					<span className="fw-bold">{t("description")}: </span>
+					<span className="fw-bold">{t('description')}: </span>
 					{collection?.description}
 				</p>
 
@@ -79,11 +82,11 @@ const ViewCollection = () => {
 					})}
 				</p>
 
-				{!collection?.items!.length && (
-					<p className="text-center">
-						{t("no_items")}
-					</p>
+				{!collection?.items?.length && (
+					<p className="text-center">{t('no_items')}</p>
 				)}
+				{tableData && <CollectionTable items={tableData} />}
+			{/* <CollectionTable items={[{_id:'sdfghj', name:'tiotrek', date:'today'},{_id:'sdfddhj', name:'piotrek', date:'today'}]} /> */}
 			</section>
 		</main>
 	);

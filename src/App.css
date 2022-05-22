@@ -10,3 +10,21 @@
 .form-check-label {
     color:var(--text-primary)!important;
 }
+
+.react-bootstrap-table table {
+    table-layout: auto;
+    overflow-x: scroll;
+    min-width: 800px;
+    }
+
+ .react-bootstrap-table .filter-label .sr-only {
+     display: none;
+ }
+
+ .react-bootstrap-table .text-filter {
+    max-height: 30px;
+    font-size: 16px;
+}
+.react-bootstrap-table .order-4{
+    margin-right: 10px;
+}

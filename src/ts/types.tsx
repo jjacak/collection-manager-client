@@ -2,12 +2,13 @@ export type propsChildren = {
 	children: React.ReactNode;
 };
 export interface CollectionItem {
-	name: string;
+	name: {value:string, label:string, type:string};
 	tags: string[];
 	author: string;
 	comments: { comment_author: string; comment_body: string }[];
 	likes: string[];
 	_id: string;
+	date:Date;
 }
 
 export interface CollectionInterface {
