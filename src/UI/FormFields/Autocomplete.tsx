@@ -1,20 +1,33 @@
-import { useState } from 'react';
+import { useState, forwardRef, useImperativeHandle, Ref } from 'react';
 import { MultiSelect } from 'react-multi-select-component';
 import { Form } from 'react-bootstrap';
 
 const options = [
-	{ label: 'Wine', value: 'wine' },
-	{ label: 'Fantasy', value: 'fantasy' },
-	{ label: '2000', value: 'strawberry' },
+	{ label: 'wine', value: 'wine' },
+	{ label: 'fantasy', value: 'fantasy' },
+	{ label: 'whisky', value: 'whisky' },
+	{ label: 'rock', value: 'rock' },
+	{ label: 'rare', value: 'rare' },
 ];
-
-const Autocomplete:React.FC<{onSelect:(tags:[])=>void}> = (props) => {
+export type TagsType = {
+	label: 'string';
+	value: 'string';
+	
+};
+const Autocomplete = forwardRef((props, ref) => {
 	const [selected, setSelected] = useState([]);
+	useImperativeHandle(
+		ref,
+		() => ({
+			getTags: () => {
+				return selected;
+			},
+		}),
+		[selected]
+	);
 
 	return (
-		<Form.Group>
-            <Form.Label>Tags:</Form.Label>
-			{/* <pre>{JSON.stringify(selected)}</pre> */}
+	
 			<MultiSelect
 				options={options}
 				value={selected}
@@ -23,8 +36,8 @@ const Autocomplete:React.FC<{onSelect:(tags:[])=>void}> = (props) => {
 				isCreatable
 				hasSelectAll={false}
 			/>
-		</Form.Group>
+	
 	);
-};
+});
 
 export default Autocomplete;

@@ -5,23 +5,17 @@ import TextFormField from '../UI/FormFields/TextFormField';
 import SelectFormField from '../UI/FormFields/SelectFormField';
 import Button from '../UI/Button';
 import { MultiSelect } from 'react-multi-select-component';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import classes from './AddCollection.module.css';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
 import Textarea from '../UI/FormFields/Textarea';
+import Autocomplete, {TagsType} from '../UI/FormFields/Autocomplete';
 
-const tagsOptions = [
-	{ label: 'wine', value: 'wine' },
-	{ label: 'fantasy', value: 'fantasy' },
-	{ label: '2000', value: '2000' },
-];
 const AddCollection = () => {
-	const [selectedTags, setSelectedTags] = useState<
-		{ label: string; value: string }[]
-	>([]);
+	const tagsRef = useRef<any>();
 	const [uploadedImage, setUploadedImage] = useState<File | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<any|null>(null);
@@ -42,11 +36,10 @@ const AddCollection = () => {
 			<Formik
 				validationSchema={schema}
 				onSubmit={async (val) => {
-					console.log(schema)
 					try {
 						setIsLoading(true);
 						setError(null);
-						const tags = selectedTags.map((t) => t.value);
+						const tags = tagsRef.current.getTags().map((t:TagsType) => t.value);
 						const data = {
 							...val,
 							tags: JSON.stringify(tags),
@@ -113,15 +106,7 @@ const AddCollection = () => {
 
 						<Form.Group className="mb-3">
 							<Form.Label htmlFor="autocomplete">{t('tags')}</Form.Label>
-							<MultiSelect
-								className={classes.autocomplete}
-								options={tagsOptions}
-								value={selectedTags}
-								onChange={setSelectedTags}
-								labelledBy="Select"
-								isCreatable
-								hasSelectAll={false}
-							/>
+							<Autocomplete ref={tagsRef}/>
 						</Form.Group>
 						<Form.Group className="mb-3">
 							<Form.Label htmlFor="image">{t('image')}</Form.Label>

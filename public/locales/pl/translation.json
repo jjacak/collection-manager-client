@@ -39,6 +39,25 @@
     "books":"Książki",
     "music_albums":"Albumy muzyczne",
     "sending":"Wysyłanie",
-    "loading":"Pobieranie"
+    "loading":"Pobieranie",
+	"add_item":"Dodaj pozycję",
+	"view_collection": "Zobacz Kolekcję",
+    "category":"Kategoria",
+    "author":"Autor",
+    "item_name":"Nazwa Pozycji",
+    "add_field":"Dodaj pole formularza",
+    "type":"Typ",
+    "confirm":"Zatwierdź",
+    "close":"Zamknij",
+    "radio_buttons":"Pole wyboru opcji (Tak/Nie)",
+    "number":"Liczba",
+    "date":"Data",
+    "text_field":"Linijka tekstu",
+    "text_area": "Pole tekstowe",
+    "yes":"Tak",
+    "no":"Nie"
+
+
+
 
 }

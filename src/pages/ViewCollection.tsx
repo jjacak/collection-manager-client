@@ -4,20 +4,20 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { CollectionInterface } from '../ts/types';
 import { Badge } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 const ViewCollection = () => {
 	const { id } = useParams();
 	const [collection, setCollection] = useState<CollectionInterface | null>(
 		null
 	);
-
+	const { t } = useTranslation();
 	useEffect(() => {
 		const getCollection = async () => {
 			try {
 				const response = await axios.get(
 					`${process.env.REACT_APP_SERVER}/get-collection/${id}`
 				);
-				console.log(response);
 				setCollection(response?.data[0]);
 			} catch (error) {
 				console.log(error);
@@ -40,20 +40,26 @@ const ViewCollection = () => {
 						}}
 						to={`/add-item/${id}`}
 					>
-						Add Item
+						{t('add_item')}
 					</NavLink>
 				</div>
-                <img src={collection?.image} className = "img-fluid d-block rounded mx-auto mb-4"alt="Collection cover image"/>
+				{collection?.image && (
+					<img
+						src={collection?.image}
+						className="img-fluid d-block rounded mx-auto mb-4"
+						alt="Collection cover image"
+					/>
+				)}
 				<p className="fs-4">
-					<span className="fw-bold">Author: </span>
+					<span className="fw-bold">{t("author")}: </span>
 					{collection?.owner_name}
 				</p>
 				<p className="fs-4">
-					<span className="fw-bold">Category: </span>
+					<span className="fw-bold">{t("category")}: </span>
 					{collection?.topic}
 				</p>
 				<p className="fs-4">
-					<span className="fw-bold">Description: </span>
+					<span className="fw-bold">{t("description")}: </span>
 					{collection?.description}
 				</p>
 
@@ -71,9 +77,11 @@ const ViewCollection = () => {
 					})}
 				</p>
 
-				{!collection?.items!.length && <p className="text-center">
-					This collection doens't have any items yet.
-				</p>}
+				{!collection?.items!.length && (
+					<p className="text-center">
+						This collection doens't have any items yet.
+					</p>
+				)}
 			</section>
 		</main>
 	);

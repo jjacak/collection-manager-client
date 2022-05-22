@@ -39,6 +39,24 @@
     "books":"Books",
     "music_albums":"Music albums",
 	"sending":"Sending",
-	"loading":"Loading"
+	"loading":"Loading",
+	"add_item":"Add Item",
+	"view_collection": "View Collection",
+    "category":"Category",
+    "author":"Author",
+	"item_name":"Item name",
+    "add_field":"Add custom field",
+	"type":"Type",
+	"confirm":"Confirm",
+    "close":"Close",
+	"radio_buttons":"Yes/No Radio buttons",
+    "number":"Number",
+    "date":"Date",
+    "text_field":"Text field",
+    "text_area": "Multiline text field",
+	"yes":"Yes",
+    "no":"No"
+
+
 
 }
