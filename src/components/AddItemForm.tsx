@@ -1,5 +1,5 @@
 import { Formik, Field, ErrorMessage } from 'formik';
-import { Form } from 'react-bootstrap';
+import { Form, Button as BButon } from 'react-bootstrap';
 import * as yup from 'yup';
 import TextFormField from '../UI/FormFields/TextFormField';
 import Button from '../UI/Button';
@@ -70,16 +70,22 @@ const AddItemForm = () => {
 		setIsModalOpen(false);
 	};
 
-    let initialValues: initialValuesType = {};
+	const deleteField = (name: string) => {
+		setFormFields((previous) =>
+			previous.filter((field) => field.name !== name)
+		);
+	};
+
+	let initialValues: initialValuesType = {};
 	formFields.forEach((item) => {
 		initialValues[item.name] = '';
 	});
-console.log(error)
+	console.log(error);
 	return (
 		<>
 			<Formik
 				validationSchema={schema}
-				onSubmit={async (values, {resetForm}) => {
+				onSubmit={async (values, { resetForm }) => {
 					setError(null);
 					setIsLoading(true);
 					try {
@@ -90,7 +96,7 @@ console.log(error)
 
 						for (let [key, value] of Object.entries(values)) {
 							const currentField = formFields.filter((f) => f.name === key)[0];
-        
+
 							formData[key] = {
 								value: value,
 								label: currentField.label,
@@ -98,7 +104,12 @@ console.log(error)
 							};
 						}
 
-						const data = { ...formData, tags: tags, author: user?.sub , date:new Date()};
+						const data = {
+							...formData,
+							tags: tags,
+							author: user?.sub,
+							date: new Date(),
+						};
 						const accessToken = await getAccessTokenSilently({
 							audience: process.env.REACT_APP_AUTH0_AUDIENCE,
 						});
@@ -112,8 +123,8 @@ console.log(error)
 								},
 							}
 						);
-                        resetForm()
-                        navigate(`/view-collection/${id}`)
+						resetForm();
+						navigate(`/view-collection/${id}`);
 					} catch (error: any) {
 						setError(error);
 					}
@@ -147,13 +158,16 @@ console.log(error)
 										label={f.label}
 										name={f.name}
 										component={Textarea}
-                                        value={values[f.name] || ''}
+										value={values[f.name] || ''}
+										addonText="-"
+										addonOnClick={deleteField.bind(null, f.name)}
 									/>
 								);
 							}
 							if (f.type === 'radio') {
 								return (
 									<Form.Group key={i}>
+										<BButon variant="outline-secondary" style ={{marginRight:'3px'}}onClick={deleteField.bind(null, f.name)}>-</BButon>
 										<Form.Label>{f.label}</Form.Label>
 										<Field
 											component={Radio}
@@ -180,7 +194,9 @@ console.log(error)
 									type={f.type}
 									name={f.name}
 									component={TextFormField}
-                                    value={values[f.name] || ''}
+									value={values[f.name] || ''}
+									addonText={f.name !== 'name' ? '-' : ''}
+									addonOnClick={deleteField.bind(null, f.name)}
 								/>
 							);
 						})}
@@ -196,7 +212,9 @@ console.log(error)
 						</div>
 						{error && (
 							<p className="text-danger">
-								{error.message || error.response?.data?.msg || 'Sorry, something went wrong!'}
+								{error.message ||
+									error.response?.data?.msg ||
+									'Sorry, something went wrong!'}
 							</p>
 						)}
 					</Form>
