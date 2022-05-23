@@ -56,7 +56,9 @@
     "text_area": "Multiline text field",
 	"yes":"Yes",
     "no":"No",
-	"no_items":"This collection doens't have any items yet."
+	"no_items":"This collection doens't have any items yet.",
+	"welcome":"Welcome",
+	"browse_largest":"Browse our largest collections:"
 
 
 

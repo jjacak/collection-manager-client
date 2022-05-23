@@ -1,24 +1,32 @@
-
+import { useTranslation } from 'react-i18next';
+import { useState,useEffect } from 'react';
+import axios from 'axios';
+import CollectionCard from '../components/CollectionCard';
 
 const Dashboard = () => {
-	return (
-	
-			<section>
-			<h1>Lorem ipsum dolor sit amet.</h1>
-			<p>
-				Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quaerat
-				excepturi iusto quis eius harum neque ratione ipsa quas nobis tenetur.
-				Modi aperiam exercitationem beatae voluptatum!
-			</p>
-			<p>
-				Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil corrupti
-				quas nulla eligendi enim ducimus repellendus ad quos ut vitae in, atque
-				expedita eius culpa, commodi odio? Numquam debitis id, excepturi
-				perspiciatis explicabo at tempore dolorem tempora reprehenderit officiis
-				consectetur?
-			</p>
-		</section>
+	const { t } = useTranslation();
+	const [collections, setCollections]= useState([])
+
+	useEffect(()=>{
+		const fetchCollections = async () => {
+			
+				const response = await axios.get(
+					`${process.env.REACT_APP_SERVER}/get-largest-collections`
+				);
+				setCollections(response.data);
 		
+		};
+		fetchCollections();
+	}, [])
+	return (
+		<section>
+			<h2  className='mb-4'>{t("browse_largest")}</h2>
+			<div className="row justify-content-center mt-3">
+				{collections.map((c) => {
+					return <CollectionCard key={c['_id']} collection={c} />;
+				})}
+			</div>
+		</section>
 	);
 };
 
