@@ -59,7 +59,6 @@ const AddCollection = () => {
 								},
 							}
 						);
-						console.log('response:', res);
 						navigate('/profile');
 					} catch (error) {
 						setError(error)
@@ -123,7 +122,7 @@ const AddCollection = () => {
 								{isLoading ? `${t('sending')}...` : `${t('create_collection')}`}
 							</Button>
 						</div>
-						{error && <p className='text-danger'>{error?.response?.data?.msg || 'Sorry, something went wrong!'}</p>}
+						{error && <p className='text-danger'>{error.message || error.response?.data?.msg || 'Sorry, something went wrong!'}</p>}
 					</Form>
 				)}
 			</Formik>

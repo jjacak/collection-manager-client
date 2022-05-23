@@ -6,6 +6,7 @@ import { CollectionInterface } from '../ts/types';
 import { Badge } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import CollectionTable from '../components/CollectionTable';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const ViewCollection = () => {
 	const { id } = useParams();
@@ -13,6 +14,12 @@ const ViewCollection = () => {
 		null
 	);
 	const { t } = useTranslation();
+	const { user } = useAuth0();
+
+	const isOwner = user?.sub === collection?.owner_id;
+	const isAdmin =user?.['http:/collection-manager-app.com/roles']?.includes('admin');
+	const isAuthorized = isOwner || isAdmin;
+
 	useEffect(() => {
 		const getCollection = async () => {
 			try {
@@ -27,16 +34,20 @@ const ViewCollection = () => {
 		getCollection();
 	}, []);
 
-
-	const tableData = collection?.items?.map(i=>{return {_id:i._id, name:i.name.value, date:i.date.toString().slice(0,10)}})
-	console.log(tableData);
+	const tableData = collection?.items?.map((i) => {
+		return {
+			_id: i._id,
+			name: i.name.value,
+			date: i.date.toString().slice(0, 10),
+		};
+	});
 	return (
 		<main>
 			<section>
 				<h1 className="text-center mb-4 bg-warning">
 					Collection: {collection?.title}
 				</h1>
-				<div className="text-center mb-4">
+				{isAuthorized && <div className="text-center mb-4">
 					<NavLink
 						className="btn"
 						style={{
@@ -47,7 +58,7 @@ const ViewCollection = () => {
 					>
 						{t('add_item')}
 					</NavLink>
-				</div>
+				</div>}
 				{collection?.image && (
 					<img
 						src={collection?.image}
@@ -85,8 +96,9 @@ const ViewCollection = () => {
 				{!collection?.items?.length && (
 					<p className="text-center">{t('no_items')}</p>
 				)}
-				{tableData && tableData.length>0 && <CollectionTable items={tableData} />}
-
+				{tableData && tableData.length > 0 && (
+					<CollectionTable items={tableData} />
+				)}
 			</section>
 		</main>
 	);

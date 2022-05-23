@@ -196,7 +196,7 @@ console.log(error)
 						</div>
 						{error && (
 							<p className="text-danger">
-								{error?.response?.data?.msg || 'Sorry, something went wrong!'}
+								{error.message || error.response?.data?.msg || 'Sorry, something went wrong!'}
 							</p>
 						)}
 					</Form>
