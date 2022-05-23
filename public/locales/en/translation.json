@@ -28,7 +28,7 @@
 	"profile":"Profile",
 	"add_collection":"Add Collection",
 	"create_collection":"Create Collection",
-	"title":"Collection Title:",
+	"title":"Collection Title",
 	"topic":"Collection Topic:",
 	"description":"Collection Description:",
 	"tags":"Tags (optional):",
@@ -58,7 +58,8 @@
     "no":"No",
 	"no_items":"This collection doens't have any items yet.",
 	"welcome":"Welcome",
-	"browse_largest":"Browse our largest collections:"
+	"browse_largest":"Browse our largest collections:",
+	"browse_recent":"See most recent items:"
 
 
 

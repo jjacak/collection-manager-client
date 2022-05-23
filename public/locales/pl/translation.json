@@ -28,7 +28,7 @@
     "profile":"Profil",
     "add_collection":"Dodaj Kolekcję",
     "create_collection":"Utwórz Kolekcję",
-	"title":"Tytuł Kolekcji:",
+	"title":"Tytuł Kolekcji",
 	"topic":"Temat Kolekcji:",
 	"description":"Opis Kolekcji:",
 	"tags":"Tagi (opcjonalnie):",
@@ -58,7 +58,9 @@
     "no":"Nie",
     "no_items":"Ta kolekcja nie ma jeszcze żadnych pozycji.",
     "welcome":"Witaj",
-    "browse_largest":"Zobacz nasze największe kolekcje:"
+    "browse_largest":"Zobacz nasze największe kolekcje:",
+	"browse_recent":"Zobacz najnowsze pozycje:"
+
 
 
 

@@ -1,4 +1,4 @@
-import { Card, Badge, Button as BootstrapButton } from 'react-bootstrap';
+import { Card, Badge } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { CollectionInterface } from '../ts/types';
 import defaultImage from '../img/default-img.png';
