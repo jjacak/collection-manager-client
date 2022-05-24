@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { User} from '@auth0/auth0-react';
+import { User } from '@auth0/auth0-react';
 import UsersTable from '../components/UsersTable';
 import { useAuth0 } from '@auth0/auth0-react';
 
@@ -31,7 +31,7 @@ const AdminPanel = () => {
 
 	useEffect(() => {
 		getUsers();
-	}, [getUsers]);
+	}, []);
 
 	const deleteUser = async (id: string) => {
 		const accessToken = await getAccessTokenSilently({
@@ -55,19 +55,24 @@ const AdminPanel = () => {
 		);
 		getUsers();
 	};
-	const updateMetadata = async (id:string, roleName:string[]|null)=>{
+	const updateMetadata = async (id: string, roleName: string[] | null) => {
 		const accessToken = await getAccessTokenSilently({
 			audience: process.env.REACT_APP_AUTH0_AUDIENCE,
 		});
 		const res = await axios.patch(
 			`${process.env.REACT_APP_SERVER}/users/${id}/metadata`,
-			{ roles: roleName},
+			{ roles: roleName },
 			{ headers: { Authorization: `Bearer ${accessToken}` } }
 		);
-	}
-	const updateRoles = async (id: string, roles: string[], removeRole:boolean) => {
-
-		const url = removeRole? `${process.env.REACT_APP_SERVER}/users/${id}/deleteroles`:`${process.env.REACT_APP_SERVER}/users/${id}/roles`
+	};
+	const updateRoles = async (
+		id: string,
+		roles: string[],
+		removeRole: boolean
+	) => {
+		const url = removeRole
+			? `${process.env.REACT_APP_SERVER}/users/${id}/deleteroles`
+			: `${process.env.REACT_APP_SERVER}/users/${id}/roles`;
 		const accessToken = await getAccessTokenSilently({
 			audience: process.env.REACT_APP_AUTH0_AUDIENCE,
 		});
@@ -79,7 +84,6 @@ const AdminPanel = () => {
 		getUsers();
 	};
 
-
 	return (
 		<section>
 			<h1 className="text-center mb-4 bg-warning">{t('user_management')}</h1>
@@ -90,8 +94,8 @@ const AdminPanel = () => {
 					users={users}
 					onDeleteUser={deleteUser}
 					onBlockUser={blockUser}
-					onUpdateRoles = {updateRoles}
-					onUpdateMetadata = {updateMetadata}
+					onUpdateRoles={updateRoles}
+					onUpdateMetadata={updateMetadata}
 				/>
 			)}
 		</section>
