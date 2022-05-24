@@ -1,4 +1,4 @@
-import { useState, forwardRef, useImperativeHandle, Ref } from 'react';
+import { useState, forwardRef, useImperativeHandle} from 'react';
 import { MultiSelect } from 'react-multi-select-component';
 
 const options = [

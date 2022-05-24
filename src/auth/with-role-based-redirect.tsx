@@ -10,9 +10,11 @@ export const withRoleBasedRedirect = <P extends object>(
   Component: ComponentType<P>,
   options: WithRoleBasedRedirectOptions
 ): FC<P> => (props: P): JSX.Element => {
+
   const navigate = useNavigate();
   const { getIdTokenClaims } = useAuth0();
   const [isAuthorized, setIsAuthorized] = useState(false);
+  
   useEffect(() => {
     async function getRoles(): Promise<Array<string>> {
       const claims = await getIdTokenClaims();

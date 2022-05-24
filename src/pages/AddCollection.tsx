@@ -45,7 +45,6 @@ const AddCollection = () => {
 							owner_id: user!.sub,
 							owner_name:user!.nickname
 						};
-						console.log(data);
 						const accessToken = await getAccessTokenSilently({
 							audience: process.env.REACT_APP_AUTH0_AUDIENCE,
 						});

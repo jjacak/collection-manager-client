@@ -8,8 +8,7 @@ const SelectFormField: React.FC<
 		options: Array<{ label: string; value: string }>;
 	}
 > = ({ field, form, label, options, ...props }) => {
-	const errorText =
-		getIn(form.touched, field.name) && getIn(form.errors, field.name);
+	
 	return (
 		<Form.Group className="mb-3">
 			{label && <Form.Label htmlFor={field.name}>{label}</Form.Label>}

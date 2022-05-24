@@ -22,7 +22,6 @@ const AdminPanel = () => {
 			const res = await axios.get(`${process.env.REACT_APP_SERVER}/users`, {
 				headers: { Authorization: `Bearer ${accessToken}` },
 			});
-			const usersData = res.data.map((u: User) => {});
 			setUsers(res.data);
 		} catch (error: any) {
 			setError(error.message || 'Unable to fetch users.');
@@ -32,7 +31,7 @@ const AdminPanel = () => {
 
 	useEffect(() => {
 		getUsers();
-	}, []);
+	}, [getUsers]);
 
 	const deleteUser = async (id: string) => {
 		const accessToken = await getAccessTokenSilently({

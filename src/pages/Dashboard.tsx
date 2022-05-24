@@ -17,7 +17,6 @@ const Dashboard = () => {
 	const [collections, setCollections] = useState([]);
 	const [items, setItems] = useState<NewestItemType[]>([]);
 
-	console.log(items);
 	useEffect(() => {
 		const fetchData = async () => {
 			const [collectionsData, itemsData] = await Promise.all([
@@ -50,6 +49,7 @@ const Dashboard = () => {
 							ownerName: e.owner_name,
 							collectionId: e._id,
 							itemName: e.items[0].name.value,
+							itemId:e.items[0]._id
 						};
 						return <ItemCard key={e._id} item={item} />;
 					})}

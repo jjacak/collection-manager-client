@@ -36,7 +36,7 @@ const ViewUser: React.FC = () => {
 			setIsFetching(false);
 		};
 		getUser();
-	}, []);
+	}, [getAccessTokenSilently, userId]);
 
 	if (isLoading || isFetching) {
 		return <div>{t("loading")}...</div>;

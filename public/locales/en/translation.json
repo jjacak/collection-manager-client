@@ -30,7 +30,7 @@
 	"create_collection":"Create Collection",
 	"title":"Collection Title",
 	"topic":"Collection Topic:",
-	"description":"Collection Description:",
+	"description":"Collection Description",
 	"tags":"Tags (optional):",
 	"image":"Cover Image (optional):",
 	"field_required":"This field is required.",
@@ -59,7 +59,13 @@
 	"no_items":"This collection doens't have any items yet.",
 	"welcome":"Welcome",
 	"browse_largest":"Browse our largest collections:",
-	"browse_recent":"See most recent items:"
+	"browse_recent":"See most recent items:",
+	"view_item":"View Item",
+	"collection": "Kolekcja",
+	"item":"Item",
+	"edit":"Edit",
+    "view":"View",
+	"return":"Return"
 
 
 

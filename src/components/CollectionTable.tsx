@@ -4,24 +4,43 @@ import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import { Button } from 'react-bootstrap';
 import { useContext } from 'react';
 import { ThemeContext } from '../store/theme-context';
+import { NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
-const ActionFormatter = () => {
+const ActionFormatter = (
+	cell: any,
+	row: any,
+	index: number,
+	formatExtraData: any
+) => {
+	
 	return (
 		<div className="text-center">
-			<Button className="btn-success" size="sm" style={{ marginRight: '4px' }}>
-				View
-			</Button>
-			<Button className="btn-warning" size="sm" style={{ marginRight: '4px' }}>
-				Edit
-			</Button>
-			<Button className="btn-danger" size="sm">
-				Delete
-			</Button>
+			<NavLink
+				to={`/view-item/${row._id}`}
+				className="btn"
+				style={{
+					color: 'var(--text-primary)',
+					backgroundColor: 'var(--accent)',
+					marginRight: '4px',
+				}}
+			>
+				{formatExtraData.view}
+			</NavLink>
+			{formatExtraData.isAuthorized && (
+				<Button className="btn-warning" style={{ marginRight: '4px' }}>
+					{formatExtraData.edit}
+				</Button>
+			)}
+			{formatExtraData.isAuthorized && <Button className="btn-danger">{formatExtraData.delete}</Button>}
 		</div>
 	);
 };
 
-const CollectionTable: React.FC<{ items: any[] }> = (props) => {
+const CollectionTable: React.FC<{ items: any[]; isAuthorized: boolean }> = (
+	props
+) => {
+	const { t } = useTranslation();
 	const themeContext = useContext(ThemeContext);
 	const columns = [
 		{
@@ -43,10 +62,10 @@ const CollectionTable: React.FC<{ items: any[] }> = (props) => {
 			dataField: 'actions',
 			text: 'Actions',
 			isDummyField: true,
+			formatExtraData: {isAuthorized:props.isAuthorized, view:t("view"), edit:t("edit"), delete:t("delete")},
 			formatter: ActionFormatter,
 		},
 	];
-
 
 	return (
 		<BootstrapTable

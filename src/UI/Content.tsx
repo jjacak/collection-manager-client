@@ -1,4 +1,3 @@
-import { Outlet } from 'react-router-dom';
 import classes from './Content.module.css';
 import { Container } from 'react-bootstrap';
 import {propsChildren} from '../ts/types'

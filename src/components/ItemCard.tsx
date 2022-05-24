@@ -7,6 +7,7 @@ type ItemProps = {
 	ownerName: string;
 	collectionId: string;
 	itemName: string;
+	itemId:string;
 };
 const ItemCard: React.FC<{ item: ItemProps }> = (props) => {
 	const { t } = useTranslation();
@@ -31,14 +32,14 @@ const ItemCard: React.FC<{ item: ItemProps }> = (props) => {
 					{props.item.ownerName}
 				</Card.Text>
 				<NavLink
-					to={`/view-collection/${props.item.collectionId}`}
+					to={`/view-item/${props.item.itemId}`}
 					className="btn"
 					style={{
 						color: 'var(--text-primary)',
 						backgroundColor: 'var(--accent)',
 					}}
 				>
-					{t('view_collection')}
+					{t('view_item')}
 				</NavLink>
 			</Card.Body>
 		</Card>

@@ -30,7 +30,7 @@
     "create_collection":"Utwórz Kolekcję",
 	"title":"Tytuł Kolekcji",
 	"topic":"Temat Kolekcji:",
-	"description":"Opis Kolekcji:",
+	"description":"Opis Kolekcji",
 	"tags":"Tagi (opcjonalnie):",
 	"image":"Okładka (opcjonanie):",
 	"field_required":"To pole jest wymagane.",
@@ -59,10 +59,13 @@
     "no_items":"Ta kolekcja nie ma jeszcze żadnych pozycji.",
     "welcome":"Witaj",
     "browse_largest":"Zobacz nasze największe kolekcje:",
-	"browse_recent":"Zobacz najnowsze pozycje:"
-
-
-
+	"browse_recent":"Zobacz najnowsze pozycje:",
+	"view_item":"Zobacz pozycję",
+    "collection":"Kolekcja",
+    "item":"Pozycja",
+    "edit":"Edytuj",
+    "view":"Zobacz",
+    "return":"Powrót"
 
 
 }

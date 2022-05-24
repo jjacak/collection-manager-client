@@ -80,7 +80,7 @@ const AddItemForm = () => {
 	formFields.forEach((item) => {
 		initialValues[item.name] = '';
 	});
-	console.log(error);
+
 	return (
 		<>
 			<Formik

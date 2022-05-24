@@ -17,7 +17,8 @@ const ViewCollection = () => {
 	const { user } = useAuth0();
 
 	const isOwner = user?.sub === collection?.owner_id;
-	const isAdmin =user?.['http:/collection-manager-app.com/roles']?.includes('admin');
+	const isAdmin =
+		user?.['http:/collection-manager-app.com/roles']?.includes('admin');
 	const isAuthorized = isOwner || isAdmin;
 
 	useEffect(() => {
@@ -32,7 +33,7 @@ const ViewCollection = () => {
 			}
 		};
 		getCollection();
-	}, []);
+	}, [id]);
 
 	const tableData = collection?.items?.map((i) => {
 		return {
@@ -42,28 +43,30 @@ const ViewCollection = () => {
 		};
 	});
 	return (
-		<main>
+		<>
 			<section>
 				<h1 className="text-center mb-4 bg-warning">
-					Collection: {collection?.title}
+					{t('collection')}: {collection?.title}
 				</h1>
-				{isAuthorized && <div className="text-center mb-4">
-					<NavLink
-						className="btn"
-						style={{
-							backgroundColor: 'var(--accent)',
-							color: 'var(--text-primary',
-						}}
-						to={`/add-item/${id}`}
-					>
-						{t('add_item')}
-					</NavLink>
-				</div>}
+				{isAuthorized && (
+					<div className="text-center mb-4">
+						<NavLink
+							className="btn"
+							style={{
+								backgroundColor: 'var(--accent)',
+								color: 'var(--text-primary',
+							}}
+							to={`/add-item/${id}`}
+						>
+							{t('add_item')}
+						</NavLink>
+					</div>
+				)}
 				{collection?.image && (
 					<img
 						src={collection?.image}
 						className="img-fluid d-block rounded mx-auto mb-4"
-						alt="Collection cover image"
+						alt="Collection cover"
 					/>
 				)}
 				<p className="fs-4">
@@ -97,10 +100,10 @@ const ViewCollection = () => {
 					<p className="text-center">{t('no_items')}</p>
 				)}
 				{tableData && tableData.length > 0 && (
-					<CollectionTable items={tableData} />
+					<CollectionTable items={tableData} isAuthorized={isAuthorized}/>
 				)}
 			</section>
-		</main>
+		</>
 	);
 };
 
