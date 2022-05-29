@@ -1,20 +1,23 @@
 import { NavLink } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { CollectionInterface } from '../ts/types';
-import { Badge } from 'react-bootstrap';
+import { Badge, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import CollectionTable from '../components/CollectionTable';
 import { useAuth0 } from '@auth0/auth0-react';
+import useHttp from '../hooks/use-http';
 
 const ViewCollection = () => {
 	const { id } = useParams();
+	const navigate = useNavigate();
+	const { sendRequest: sendDeleteRequest } = useHttp();
 	const [collection, setCollection] = useState<CollectionInterface | null>(
 		null
 	);
 	const { t } = useTranslation();
-	const { user } = useAuth0();
+	const { user, getAccessTokenSilently } = useAuth0();
 
 	const isOwner = user?.sub === collection?.owner_id;
 	const isAdmin =
@@ -34,6 +37,24 @@ const ViewCollection = () => {
 		};
 		getCollection();
 	}, [id]);
+
+	const deleteCollection = async () => {
+		const getResponse = (response:any)=>{
+			navigate(-1)
+		}
+		const accessToken = await getAccessTokenSilently({
+			audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+		});
+		sendDeleteRequest(
+			`${process.env.REACT_APP_SERVER}/delete-collections/${id}`,
+			{
+				method: 'DELETE',
+				headers: {
+					Authorization: `Bearer ${accessToken}`,
+				},
+			}, getResponse
+		);
+	};
 
 	const tableData = collection?.items?.map((i) => {
 		return {
@@ -55,11 +76,15 @@ const ViewCollection = () => {
 							style={{
 								backgroundColor: 'var(--accent)',
 								color: 'var(--text-primary',
+								marginRight: '3px',
 							}}
 							to={`/add-item/${id}`}
 						>
 							{t('add_item')}
 						</NavLink>
+						<Button className="btn-danger" onClick={deleteCollection}>
+							{t('delete')}
+						</Button>
 					</div>
 				)}
 				{collection?.image && (
@@ -100,7 +125,7 @@ const ViewCollection = () => {
 					<p className="text-center">{t('no_items')}</p>
 				)}
 				{tableData && tableData.length > 0 && (
-					<CollectionTable items={tableData} isAuthorized={isAuthorized}/>
+					<CollectionTable items={tableData} isAuthorized={isAuthorized} />
 				)}
 			</section>
 		</>

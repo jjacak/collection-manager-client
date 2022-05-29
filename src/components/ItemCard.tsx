@@ -21,7 +21,7 @@ const ItemCard: React.FC<{ item: ItemProps }> = (props) => {
 				borderColor: ' var(--card-border)',
 			}}
 		>
-			<Card.Body>
+			<Card.Body className="d-flex justify-content-between flex-column ">
 				<Card.Title>{props.item.itemName}</Card.Title>
 				<Card.Text>
 					<span className="fw-bold">{t('title')}: </span>
