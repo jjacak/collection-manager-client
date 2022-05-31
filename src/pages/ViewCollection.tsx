@@ -1,6 +1,5 @@
 import { NavLink } from 'react-router-dom';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { CollectionInterface } from '../ts/types';
 import { Badge, Button } from 'react-bootstrap';
@@ -13,6 +12,7 @@ const ViewCollection = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
 	const { sendRequest: sendDeleteRequest } = useHttp();
+	const { sendRequest: requestCollections } = useHttp();
 	const [collection, setCollection] = useState<CollectionInterface | null>(
 		null
 	);
@@ -26,22 +26,19 @@ const ViewCollection = () => {
 
 	useEffect(() => {
 		const getCollection = async () => {
-			try {
-				const response = await axios.get(
-					`${process.env.REACT_APP_SERVER}/get-collection/${id}`
-				);
-				setCollection(response?.data[0]);
-			} catch (error) {
-				console.log(error);
+
+			const displayCollection = (response:any)=>{
+				setCollection(response.data)
 			}
+			requestCollections(`${process.env.REACT_APP_SERVER}/get-collection/${id}`,{}, displayCollection)
 		};
 		getCollection();
-	}, [id]);
+	}, [id, requestCollections]);
 
 	const deleteCollection = async () => {
-		const getResponse = (response:any)=>{
-			navigate(-1)
-		}
+		const getResponse = (response: any) => {
+			navigate(-1);
+		};
 		const accessToken = await getAccessTokenSilently({
 			audience: process.env.REACT_APP_AUTH0_AUDIENCE,
 		});
@@ -52,7 +49,8 @@ const ViewCollection = () => {
 				headers: {
 					Authorization: `Bearer ${accessToken}`,
 				},
-			}, getResponse
+			},
+			getResponse
 		);
 	};
 
