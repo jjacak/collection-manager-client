@@ -9,7 +9,6 @@ const NotFound:React.FC = () => {
 	const {t} = useTranslation();
 
 	return (
-		<React.Fragment>
 			<Container>
 				<div className={'row'}>
 					<div className="col-md-12">
@@ -28,7 +27,7 @@ const NotFound:React.FC = () => {
 					</div>
 				</div>
 			</Container>
-		</React.Fragment>
+		
 	);
 };
 

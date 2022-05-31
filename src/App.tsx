@@ -64,7 +64,6 @@ function App() {
 								<RoleProtectedRoute component={AddItem} />
 							}
 						/>
-
 						<Route path="*" element={<NotFound />} />
 					</Routes>
 				</Content>

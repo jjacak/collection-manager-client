@@ -4,6 +4,7 @@ import { useCallback, useState } from 'react';
 const useHttp = () => {
 	const [error, setError] = useState<any>(null);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [didSubmit, setDidSubmit] = useState<boolean>(false);
 
 	const sendRequest = useCallback(
 		async (
@@ -13,6 +14,7 @@ const useHttp = () => {
 		) => {
 			setError(null);
 			setIsLoading(true);
+			setDidSubmit(false);
 			try {
 				const response = await axios({
 					url: url,
@@ -20,17 +22,18 @@ const useHttp = () => {
 					data: requestConfig?.body ? requestConfig.body : null,
 					headers: requestConfig?.headers ? requestConfig.headers : {},
 				});
-				if(applyData){
-					applyData(response)
+				if (applyData) {
+					applyData(response);
 				}
 			} catch (error: any) {
 				setError(error.message);
 			}
 			setIsLoading(false);
+			setDidSubmit(true);
 		},
 		[]
 	);
-	return{error,isLoading, sendRequest}
+	return { error, isLoading, sendRequest, didSubmit };
 };
 
 export default useHttp;

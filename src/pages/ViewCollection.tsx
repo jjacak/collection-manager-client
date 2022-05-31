@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { CollectionInterface } from '../ts/types';
 import { Badge, Button } from 'react-bootstrap';
@@ -12,7 +12,8 @@ const ViewCollection = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
 	const { sendRequest: sendDeleteRequest } = useHttp();
-	const { sendRequest: requestCollections } = useHttp();
+	const { sendRequest: requestCollections, didSubmit: didFetchCollection } =
+		useHttp();
 	const [collection, setCollection] = useState<CollectionInterface | null>(
 		null
 	);
@@ -26,11 +27,14 @@ const ViewCollection = () => {
 
 	useEffect(() => {
 		const getCollection = async () => {
-
-			const displayCollection = (response:any)=>{
-				setCollection(response.data)
-			}
-			requestCollections(`${process.env.REACT_APP_SERVER}/get-collection/${id}`,{}, displayCollection)
+			const displayCollection = (response: any) => {
+				setCollection(response.data);
+			};
+			requestCollections(
+				`${process.env.REACT_APP_SERVER}/get-collection/${id}`,
+				{},
+				displayCollection
+			);
 		};
 		getCollection();
 	}, [id, requestCollections]);
@@ -61,6 +65,9 @@ const ViewCollection = () => {
 			date: i.date.toString().slice(0, 10),
 		};
 	});
+	if (didFetchCollection && !collection) {
+		return <Navigate to="/404" />;
+	}
 	return (
 		<>
 			<section>
