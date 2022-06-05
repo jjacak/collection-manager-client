@@ -32,12 +32,12 @@ const ActionFormatter = (
 					{formatExtraData.edit}
 				</Button>
 			)}
-			{formatExtraData.isAuthorized && <Button className="btn-danger">{formatExtraData.delete}</Button>}
+			{formatExtraData.isAuthorized && <Button className="btn-danger" onClick={formatExtraData.onDelete.bind(null, row._id)}>{formatExtraData.delete}</Button>}
 		</div>
 	);
 };
 
-const CollectionTable: React.FC<{ items: any[]; isAuthorized: boolean }> = (
+const CollectionTable: React.FC<{ items: any[]; isAuthorized: boolean; onDelete:(itemID:string)=>void }> = (
 	props
 ) => {
 	const { t } = useTranslation();
@@ -62,7 +62,7 @@ const CollectionTable: React.FC<{ items: any[]; isAuthorized: boolean }> = (
 			dataField: 'actions',
 			text: 'Actions',
 			isDummyField: true,
-			formatExtraData: {isAuthorized:props.isAuthorized, view:t("view"), edit:t("edit"), delete:t("delete")},
+			formatExtraData: {isAuthorized:props.isAuthorized,onDelete:props.onDelete ,view:t("view"), edit:t("edit"), delete:t("delete")},
 			formatter: ActionFormatter,
 		},
 	];

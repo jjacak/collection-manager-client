@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { useParams, useNavigate, Navigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState,useCallback } from 'react';
 import { CollectionInterface } from '../ts/types';
 import { Badge, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -12,6 +12,7 @@ const ViewCollection = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
 	const { sendRequest: sendDeleteRequest } = useHttp();
+	const { sendRequest: sendDeleteItemRequest } = useHttp();
 	const { sendRequest: requestCollections, didSubmit: didFetchCollection } =
 		useHttp();
 	const [collection, setCollection] = useState<CollectionInterface | null>(
@@ -25,19 +26,21 @@ const ViewCollection = () => {
 		user?.['http:/collection-manager-app.com/roles']?.includes('admin');
 	const isAuthorized = isOwner || isAdmin;
 
-	useEffect(() => {
-		const getCollection = async () => {
-			const displayCollection = (response: any) => {
-				setCollection(response.data);
-			};
-			requestCollections(
-				`${process.env.REACT_APP_SERVER}/get-collection/${id}`,
-				{},
-				displayCollection
-			);
+	const getCollection = useCallback(async () => {
+		const displayCollection = (response: any) => {
+			setCollection(response.data);
 		};
+		requestCollections(
+			`${process.env.REACT_APP_SERVER}/get-collection/${id}`,
+			{},
+			displayCollection
+		);
+	},[id]);
+
+	useEffect(() => {
+	
 		getCollection();
-	}, [id, requestCollections]);
+	}, [id, requestCollections, getCollection]);
 
 	const deleteCollection = async () => {
 		const getResponse = (response: any) => {
@@ -57,6 +60,20 @@ const ViewCollection = () => {
 			getResponse
 		);
 	};
+
+	const deleteItem = async(itemID:string)=>{
+		const getResponse = (response:any)=>{
+			getCollection()
+		}
+
+		const accessToken = await getAccessTokenSilently({
+			audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+		});
+
+		sendDeleteItemRequest(`${process.env.REACT_APP_SERVER}/delete-item/${itemID}`,{method:'DELETE', headers:{Authorization:`Bearer ${accessToken}`}}, getResponse)
+
+
+	}
 
 	const tableData = collection?.items?.map((i) => {
 		return {
@@ -130,7 +147,7 @@ const ViewCollection = () => {
 					<p className="text-center">{t('no_items')}</p>
 				)}
 				{tableData && tableData.length > 0 && (
-					<CollectionTable items={tableData} isAuthorized={isAuthorized} />
+					<CollectionTable items={tableData} isAuthorized={isAuthorized} onDelete = {deleteItem}/>
 				)}
 			</section>
 		</>
