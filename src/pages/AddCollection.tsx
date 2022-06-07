@@ -6,20 +6,17 @@ import SelectFormField from '../UI/FormFields/SelectFormField';
 import Button from '../UI/Button';
 import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
-import { useNavigate } from 'react-router-dom';
 import Textarea from '../UI/FormFields/Textarea';
-import Autocomplete, {TagsType} from '../UI/FormFields/Autocomplete';
+import Autocomplete, { TagsType } from '../UI/FormFields/Autocomplete';
+import { useCreateCollection } from '../services/CollectionServices';
 
 const AddCollection = () => {
 	const tagsRef = useRef<any>();
-	const [uploadedImage, setUploadedImage] = useState<File | null>(null);
-	const [isLoading, setIsLoading] = useState(false);
-	const [error, setError] = useState<any|null>(null);
+	const [uploadedImage, setUploadedImage] = useState<any>(null);
 	const { t } = useTranslation();
-	const { user, getAccessTokenSilently } = useAuth0();
-	const navigate = useNavigate();
+	const { user} = useAuth0();
+	const { error, isLoading, postColection } = useCreateCollection();
 
 	const schema = yup.object().shape({
 		title: yup.string().required(`${t('field_required')}`),
@@ -34,36 +31,23 @@ const AddCollection = () => {
 			<Formik
 				validationSchema={schema}
 				onSubmit={async (val) => {
-					try {
-						setIsLoading(true);
-						setError(null);
-						const tags = tagsRef.current.getTags().map((t:TagsType) => t.value);
-						const data = {
-							...val,
-							tags: JSON.stringify(tags),
-							image: uploadedImage,
-							owner_id: user!.sub,
-							owner_name:user!.nickname
-						};
-						const accessToken = await getAccessTokenSilently({
-							audience: process.env.REACT_APP_AUTH0_AUDIENCE,
-						});
-						const res = await axios.post(
-							`${process.env.REACT_APP_SERVER}/create-collection`,
-							data,
-							{
-								headers: {
-									Authorization: `Bearer ${accessToken}`,
-									'Content-Type': 'multipart/form-data',
-								},
-							}
-						);
-						navigate('/profile');
-					} catch (error) {
-						setError(error)
+
+					const tags = tagsRef.current.getTags().map((t: TagsType) => t.value);
+					const data = {
+						...val,
+						tags: JSON.stringify(tags),
+						image: uploadedImage,
+						owner_id: user!.sub,
+						owner_name: user!.nickname,
+					};
+
+					const formData = new FormData();
+					for (const key of Object.keys(data)) {
+						if (data[key as keyof typeof data]) {
+							formData.append(key, data[key as keyof typeof data]);
+						}
 					}
-					setIsLoading(false);
-					
+					postColection(formData);
 				}}
 				initialValues={{
 					title: '',
@@ -100,9 +84,12 @@ const AddCollection = () => {
 							component={Textarea}
 						/>
 
-						<Form.Group className="mb-3" style={{color:'var(--text-constant)'}}>
+						<Form.Group
+							className="mb-3"
+							style={{ color: 'var(--text-constant)' }}
+						>
 							<Form.Label htmlFor="autocomplete">{t('tags')}</Form.Label>
-							<Autocomplete ref={tagsRef}/>
+							<Autocomplete ref={tagsRef} />
 						</Form.Group>
 						<Form.Group className="mb-3">
 							<Form.Label htmlFor="image">{t('image')}</Form.Label>
@@ -121,7 +108,13 @@ const AddCollection = () => {
 								{isLoading ? `${t('sending')}...` : `${t('create_collection')}`}
 							</Button>
 						</div>
-						{error && <p className='text-danger'>{error.message || error.response?.data?.msg || 'Sorry, something went wrong!'}</p>}
+						{error && (
+							<p className="text-danger">
+								{error.message ||
+									error.response?.data?.msg ||
+									'Sorry, something went wrong!'}
+							</p>
+						)}
 					</Form>
 				)}
 			</Formik>
