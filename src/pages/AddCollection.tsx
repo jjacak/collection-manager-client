@@ -110,9 +110,7 @@ const AddCollection = () => {
 						</div>
 						{error && (
 							<p className="text-danger">
-								{error.message ||
-									error.response?.data?.msg ||
-									'Sorry, something went wrong!'}
+								{error||'Sorry, something went wrong!'}
 							</p>
 						)}
 					</Form>

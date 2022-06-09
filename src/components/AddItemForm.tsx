@@ -11,24 +11,22 @@ import CreateFieldModal from './CreateFieldModal';
 import { v4 as uuid } from 'uuid';
 import Autocomplete, { TagsType } from '../UI/FormFields/Autocomplete';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
+import { useAddItem } from '../services/CollectionServices';
 
 type initialValuesType = {
 	[key: string]: string;
 };
-type formDataType = {
+interface FormDataInterface {
 	[key: string]: { value: string; label: string; type: string };
-};
+}
 
 const AddItemForm = () => {
 	const tagsRef = useRef<any>();
 	const { t } = useTranslation();
-	const { getAccessTokenSilently, user } = useAuth0();
+	const { user } = useAuth0();
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [isLoading, setIsLoading] = useState(false);
-	const [error, setError] = useState<any>(null);
+	const { error, isLoading, postItem } = useAddItem();
 	const [formFields, setFormFields] = useState([
 		{
 			name: 'name',
@@ -40,8 +38,6 @@ const AddItemForm = () => {
 	]);
 	const yupSchema = formFields.reduce(YupSchemaGenerator, {});
 	const schema = yup.object().shape(yupSchema);
-	const { id } = useParams();
-	const navigate = useNavigate();
 
 	const showModal = () => {
 		setIsModalOpen(true);
@@ -85,50 +81,29 @@ const AddItemForm = () => {
 		<>
 			<Formik
 				validationSchema={schema}
-				onSubmit={async (values, { resetForm }) => {
-					setError(null);
-					setIsLoading(true);
-					try {
-						const tags = tagsRef.current
-							.getTags()
-							.map((t: TagsType) => t.value);
-						let formData: formDataType = {};
+				onSubmit={(values) => {
+	
+					const tags = tagsRef.current.getTags().map((t: TagsType) => t.value);
+					let formData: FormDataInterface = {};
 
-						for (let [key, value] of Object.entries(values)) {
-							const currentField = formFields.filter((f) => f.name === key)[0];
+					for (let [key, value] of Object.entries(values)) {
+						const currentField = formFields.filter((f) => f.name === key)[0];
 
-							formData[key] = {
-								value: value,
-								label: currentField.label,
-								type: currentField.type,
-							};
-						}
-
-						const data = {
-							...formData,
-							tags: tags,
-							author: user?.sub,
-							date: new Date(),
+						formData[key] = {
+							value: value,
+							label: currentField.label,
+							type: currentField.type,
 						};
-						const accessToken = await getAccessTokenSilently({
-							audience: process.env.REACT_APP_AUTH0_AUDIENCE,
-						});
-
-						const response = await axios.post(
-							`${process.env.REACT_APP_SERVER}/add-item/${id}`,
-							data,
-							{
-								headers: {
-									Authorization: `Bearer ${accessToken}`,
-								},
-							}
-						);
-						resetForm();
-						navigate(`/view-collection/${id}`);
-					} catch (error: any) {
-						setError(error);
 					}
-					setIsLoading(false);
+			
+					const data = {
+						...formData,
+						tags: tags,
+						author: user?.sub,
+						date: new Date(),
+					};
+
+					postItem(data);
 				}}
 				initialValues={initialValues}
 			>
@@ -167,7 +142,13 @@ const AddItemForm = () => {
 							if (f.type === 'radio') {
 								return (
 									<Form.Group key={i}>
-										<BButon variant="outline-secondary" style ={{marginRight:'3px'}}onClick={deleteField.bind(null, f.name)}>-</BButon>
+										<BButon
+											variant="outline-secondary"
+											style={{ marginRight: '3px' }}
+											onClick={deleteField.bind(null, f.name)}
+										>
+											-
+										</BButon>
 										<Form.Label>{f.label}</Form.Label>
 										<Field
 											component={Radio}
@@ -212,9 +193,7 @@ const AddItemForm = () => {
 						</div>
 						{error && (
 							<p className="text-danger">
-								{error.message ||
-									error.response?.data?.msg ||
-									'Sorry, something went wrong!'}
+								{error ||'Sorry, something went wrong!'}
 							</p>
 						)}
 					</Form>
