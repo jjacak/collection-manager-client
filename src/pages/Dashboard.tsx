@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import CollectionCard from '../components/CollectionCard';
 import ItemCard from '../components/ItemCard';
 import { CollectionItem } from '../ts/types';
+import {getLargestCollections, getLatestItems} from '../services/CollectionServices'
 
 type NewestItemType = {
 	title: string;
@@ -20,10 +20,7 @@ const Dashboard = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			const [collectionsData, itemsData] = await Promise.all([
-				await axios.get(
-					`${process.env.REACT_APP_SERVER}/get-largest-collections`
-				),
-				await axios.get(`${process.env.REACT_APP_SERVER}/get-newest`),
+			getLargestCollections(), getLatestItems()
 			]);
 			setCollections(collectionsData.data);
 			setItems(itemsData.data);
