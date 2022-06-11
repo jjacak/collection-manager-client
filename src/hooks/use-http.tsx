@@ -22,6 +22,7 @@ const useHttp = () => {
 					data: requestConfig?.body ? requestConfig.body : null,
 					headers: requestConfig?.headers ? requestConfig.headers : {},
 				});
+
 				if (applyData) {
 					applyData(response);
 				}
@@ -33,7 +34,7 @@ const useHttp = () => {
 		},
 		[]
 	);
-	return { error, isLoading, sendRequest, didSubmit };
+	return { error, isLoading, sendRequest, didSubmit};
 };
 
 export default useHttp;

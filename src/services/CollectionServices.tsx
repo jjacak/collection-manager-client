@@ -1,7 +1,7 @@
 import useHttp from '../hooks/use-http';
 import { CollectionInterface, CollectionItem } from '../ts/types';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import axios, { AxiosResponse } from 'axios';
 
@@ -75,7 +75,6 @@ export const useAddItem = () => {
 };
 
 export const getLargestCollections = async () => {
-	
 	const collections = await axios.get(
 		`${process.env.REACT_APP_SERVER}/get-largest-collections`
 	);
@@ -83,7 +82,24 @@ export const getLargestCollections = async () => {
 };
 
 export const getLatestItems = async () => {
-
 	const items = await axios.get(`${process.env.REACT_APP_SERVER}/get-newest`);
 	return items;
+};
+
+export const useGetCollection = () => {
+	const { sendRequest, didSubmit } = useHttp();
+	const [collection, setCollection] = useState<CollectionInterface | null>(
+		null
+	);
+	const { id } = useParams();
+
+	const getCollectionData = (response: AxiosResponse) => {
+		setCollection(response.data);
+	};
+
+	const requestCollection = useCallback(() => {
+		sendRequest(`${process.env.REACT_APP_SERVER}/get-collection/${id}`,{}, getCollectionData);
+	}, [id]);
+
+	return { didFetchCollection: didSubmit, collection, requestCollection };
 };
