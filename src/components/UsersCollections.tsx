@@ -1,31 +1,22 @@
-import { useState, useEffect } from 'react';
+import {useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
-import axios from 'axios';
 import CollectionCard from './CollectionCard';
 import { useAuth0 } from '@auth0/auth0-react';
+import { useGetUsersCollections } from '../services/CollectionServices';
 
 const UsersCollections: React.FC<{ id: string }> = (props) => {
-	const [collections, setCollections] = useState([]);
-	const [error, setError] = useState<any | null>(null);
+	const { collections, error, requestCollections } = useGetUsersCollections();
 	const { t } = useTranslation();
 	const { user } = useAuth0();
 
 	const isAuthorized = user?.sub === props.id;
 
 	useEffect(() => {
-		const fetchCollections = async () => {
-			try {
-				const response = await axios.get(
-					`${process.env.REACT_APP_SERVER}/get-collections/${props.id}`
-				);
-				setCollections(response.data);
-			} catch (error) {
-				setError(error);
-			}
-		};
-		fetchCollections();
-	}, []);
+		
+		requestCollections(props.id)
+
+	}, [requestCollections]);
 	return (
 		<article>
 			<h2 className="my-4 text-center">{t('users_collections')}:</h2>

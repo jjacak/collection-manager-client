@@ -5,17 +5,17 @@ import { useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { CollectionInterface, CollectionItem } from '../ts/types';
 import { Button } from 'react-bootstrap';
-import useHttp from '../hooks/use-http';
+import { useDeleteItem } from '../services/CollectionServices';
 
 const ViewItem = () => {
 	const { id } = useParams();
-	const navigate = useNavigate()
+	const navigate = useNavigate();
 	const [collection, setCollection] = useState<CollectionInterface | null>(
 		null
 	);
 	const { t } = useTranslation();
-	const { user, getAccessTokenSilently } = useAuth0();
-	const { sendRequest: sendDeleteRequest } = useHttp();
+	const { user} = useAuth0();
+	const { sendDeleteItemRequest } = useDeleteItem();
 	const item: CollectionItem | undefined = collection?.items?.filter(
 		(i) => i._id === id
 	)[0];
@@ -23,7 +23,7 @@ const ViewItem = () => {
 	const isAdmin =
 		user?.['http:/collection-manager-app.com/roles']?.includes('admin');
 	const isAuthorized = isOwner || isAdmin;
-	
+
 	useEffect(() => {
 		const getCollection = async () => {
 			const response = await axios.get(
@@ -35,21 +35,12 @@ const ViewItem = () => {
 	}, [id]);
 
 	const deleteItem = async () => {
-		const getResponse = (response: any) => {
-			navigate(`/view-collection/${collection?._id}`)
-		};
-
-		const accessToken = await getAccessTokenSilently({
-			audience: process.env.REACT_APP_AUTH0_AUDIENCE,
-		});
-		sendDeleteRequest(`${process.env.REACT_APP_SERVER}/delete-item/${id}`, {
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-			},
-			method: 'DELETE',
-		}, getResponse);
+		if (!id) {
+			return;
+		}
+		await sendDeleteItemRequest(id);
+		navigate(-1);
 	};
-
 	const itemAttributes = item ? Object.entries(item) : [];
 	const itemValues = (
 		<div>
@@ -104,7 +95,9 @@ const ViewItem = () => {
 						>
 							{t('edit')}
 						</NavLink>
-						<Button className="btn-danger" onClick={deleteItem}>{t('delete')}</Button>
+						<Button className="btn-danger" onClick={deleteItem}>
+							{t('delete')}
+						</Button>
 					</>
 				)}
 			</div>

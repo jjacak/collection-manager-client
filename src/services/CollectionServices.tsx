@@ -1,7 +1,7 @@
 import useHttp from '../hooks/use-http';
 import { CollectionInterface, CollectionItem } from '../ts/types';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useState, useRef, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import axios, { AxiosResponse } from 'axios';
 
@@ -134,8 +134,8 @@ export const useDeleteCollection = () => {
 export const useDeleteItem = () => {
 	const { getAccessTokenSilently } = useAuth0();
 
-	const sendDeleteItemRequest = async(id: string) => {
-        const accessToken = await getAccessTokenSilently({
+	const sendDeleteItemRequest = async (id: string) => {
+		const accessToken = await getAccessTokenSilently({
 			audience: process.env.REACT_APP_AUTH0_AUDIENCE,
 		});
 
@@ -144,5 +144,20 @@ export const useDeleteItem = () => {
 			headers: { Authorization: `Bearer ${accessToken}` },
 		});
 	};
-    return {sendDeleteItemRequest}
+	return { sendDeleteItemRequest };
+};
+
+export const useGetUsersCollections = () => {
+	const { sendRequest, error} = useHttp();
+    const [collections, setCollections]= useState<CollectionInterface[]|[]>([])
+
+    const requestCollections = useCallback( async(id:string)=>{
+
+        const getResponse = (response:AxiosResponse)=>{
+            setCollections(response.data)
+        }
+        await sendRequest(`${process.env.REACT_APP_SERVER}/get-collections/${id}`,{}, getResponse)
+    },[])
+
+    return {requestCollections, error, collections}
 };
