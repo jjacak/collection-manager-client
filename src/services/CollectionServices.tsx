@@ -98,8 +98,51 @@ export const useGetCollection = () => {
 	};
 
 	const requestCollection = useCallback(() => {
-		sendRequest(`${process.env.REACT_APP_SERVER}/get-collection/${id}`,{}, getCollectionData);
+		sendRequest(
+			`${process.env.REACT_APP_SERVER}/get-collection/${id}`,
+			{},
+			getCollectionData
+		);
 	}, [id]);
 
 	return { didFetchCollection: didSubmit, collection, requestCollection };
+};
+
+export const useDeleteCollection = () => {
+	const { getAccessTokenSilently } = useAuth0();
+	const navigate = useNavigate();
+	const { id } = useParams();
+
+	const sendDeleteCollectionRequest = async () => {
+		const accessToken = await getAccessTokenSilently({
+			audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+		});
+		await axios.delete(
+			`${process.env.REACT_APP_SERVER}/delete-collections/${id}`,
+			{
+				method: 'DELETE',
+				headers: {
+					Authorization: `Bearer ${accessToken}`,
+				},
+			}
+		);
+		navigate(-1);
+	};
+	return { sendDeleteCollectionRequest };
+};
+
+export const useDeleteItem = () => {
+	const { getAccessTokenSilently } = useAuth0();
+
+	const sendDeleteItemRequest = async(id: string) => {
+        const accessToken = await getAccessTokenSilently({
+			audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+		});
+
+		await axios.delete(`${process.env.REACT_APP_SERVER}/delete-item/${id}`, {
+			method: 'DELETE',
+			headers: { Authorization: `Bearer ${accessToken}` },
+		});
+	};
+    return {sendDeleteItemRequest}
 };

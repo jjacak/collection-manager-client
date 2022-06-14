@@ -1,21 +1,24 @@
 import { NavLink } from 'react-router-dom';
-import { useParams, useNavigate, Navigate } from 'react-router-dom';
-import { useEffect} from 'react';
+import { useParams, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import { Badge, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import CollectionTable from '../components/CollectionTable';
 import { useAuth0 } from '@auth0/auth0-react';
-import useHttp from '../hooks/use-http';
-import { useGetCollection } from '../services/CollectionServices';
+import {
+	useGetCollection,
+	useDeleteCollection,
+	useDeleteItem,
+} from '../services/CollectionServices';
 
 const ViewCollection = () => {
 	const { id } = useParams();
-	const navigate = useNavigate();
-	const { sendRequest: sendDeleteRequest } = useHttp();
-	const { sendRequest: sendDeleteItemRequest } = useHttp();
-	const { collection, didFetchCollection, requestCollection } = useGetCollection();
+	const { sendDeleteCollectionRequest } = useDeleteCollection();
+	const { sendDeleteItemRequest } = useDeleteItem();
+	const { collection, didFetchCollection, requestCollection } =
+		useGetCollection();
 	const { t } = useTranslation();
-	const { user, getAccessTokenSilently } = useAuth0();
+	const { user} = useAuth0();
 
 	const isOwner = user?.sub === collection?.owner_id;
 	const isAdmin =
@@ -26,39 +29,10 @@ const ViewCollection = () => {
 		requestCollection();
 	}, [requestCollection]);
 
-	const deleteCollection = async () => {
-		const getResponse = (response: any) => {
-			navigate(-1);
-		};
-		const accessToken = await getAccessTokenSilently({
-			audience: process.env.REACT_APP_AUTH0_AUDIENCE,
-		});
-		sendDeleteRequest(
-			`${process.env.REACT_APP_SERVER}/delete-collections/${id}`,
-			{
-				method: 'DELETE',
-				headers: {
-					Authorization: `Bearer ${accessToken}`,
-				},
-			},
-			getResponse
-		);
-	};
-
 	const deleteItem = async (itemID: string) => {
-		const getResponse = (response: any) => {
-			requestCollection();
-		};
-
-		const accessToken = await getAccessTokenSilently({
-			audience: process.env.REACT_APP_AUTH0_AUDIENCE,
-		});
-
-		sendDeleteItemRequest(
-			`${process.env.REACT_APP_SERVER}/delete-item/${itemID}`,
-			{ method: 'DELETE', headers: { Authorization: `Bearer ${accessToken}` } },
-			getResponse
-		);
+	
+		await sendDeleteItemRequest(itemID);
+		requestCollection();
 	};
 
 	const tableData = collection?.items?.map((i) => {
@@ -90,7 +64,10 @@ const ViewCollection = () => {
 						>
 							{t('add_item')}
 						</NavLink>
-						<Button className="btn-danger" onClick={deleteCollection}>
+						<Button
+							className="btn-danger"
+							onClick={sendDeleteCollectionRequest}
+						>
 							{t('delete')}
 						</Button>
 					</div>
