@@ -1,18 +1,16 @@
 import { useParams, NavLink, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect} from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { CollectionInterface, CollectionItem } from '../ts/types';
+import { CollectionItem } from '../ts/types';
 import { Button } from 'react-bootstrap';
 import { useDeleteItem } from '../services/CollectionServices';
+import { useGetCollection } from '../services/CollectionServices';
 
 const ViewItem = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
-	const [collection, setCollection] = useState<CollectionInterface | null>(
-		null
-	);
+	const {collection, requestCollection} = useGetCollection()
 	const { t } = useTranslation();
 	const { user} = useAuth0();
 	const { sendDeleteItemRequest } = useDeleteItem();
@@ -25,13 +23,9 @@ const ViewItem = () => {
 	const isAuthorized = isOwner || isAdmin;
 
 	useEffect(() => {
-		const getCollection = async () => {
-			const response = await axios.get(
-				`${process.env.REACT_APP_SERVER}/get-item/${id}`
-			);
-			setCollection(response.data);
-		};
-		getCollection();
+
+		requestCollection()
+
 	}, [id]);
 
 	const deleteItem = async () => {
