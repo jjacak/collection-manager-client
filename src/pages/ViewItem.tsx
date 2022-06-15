@@ -10,6 +10,7 @@ import { useGetCollection } from '../services/CollectionServices';
 const ViewItem = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
+
 	const {collection, requestCollection} = useGetCollection()
 	const { t } = useTranslation();
 	const { user} = useAuth0();

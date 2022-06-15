@@ -126,7 +126,7 @@ export const useDeleteCollection = () => {
 				},
 			}
 		);
-		navigate(-1);
+		navigate('/');
 	};
 	return { sendDeleteCollectionRequest };
 };
