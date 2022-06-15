@@ -86,7 +86,7 @@ const ViewItem = () => {
 								color: 'var(--text-primary',
 								marginRight: '3px',
 							}}
-							to={`/add-item/${id}`}
+							to={`/edit-item/${id}`}
 						>
 							{t('edit')}
 						</NavLink>

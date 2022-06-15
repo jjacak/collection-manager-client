@@ -18,7 +18,7 @@ const ViewCollection = () => {
 	const { collection, didFetchCollection, requestCollection } =
 		useGetCollection();
 	const { t } = useTranslation();
-	const { user} = useAuth0();
+	const { user } = useAuth0();
 
 	const isOwner = user?.sub === collection?.owner_id;
 	const isAdmin =
@@ -30,7 +30,6 @@ const ViewCollection = () => {
 	}, [requestCollection]);
 
 	const deleteItem = async (itemID: string) => {
-	
 		await sendDeleteItemRequest(itemID);
 		requestCollection();
 	};
@@ -63,6 +62,17 @@ const ViewCollection = () => {
 							to={`/add-item/${id}`}
 						>
 							{t('add_item')}
+						</NavLink>
+						<NavLink
+							className="btn"
+							style={{
+								borderColor: 'var(--accent)',
+								color: 'var(--text-primary',
+								marginRight: '3px',
+							}}
+							to={`/edit-collection/${id}`}
+						>
+							{t('edit')}
 						</NavLink>
 						<Button
 							className="btn-danger"
