@@ -65,7 +65,9 @@
 	"item":"Item",
 	"edit":"Edit",
     "view":"View",
-	"return":"Return"
+	"return":"Return",
+    "edit_collection":"Edit collection"
+
 
 
 

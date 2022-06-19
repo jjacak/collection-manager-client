@@ -1,5 +1,5 @@
 import useHttp from '../hooks/use-http';
-import { CollectionInterface} from '../ts/types';
+import { CollectionInterface } from '../ts/types';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useState, useCallback } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -87,7 +87,7 @@ export const getLatestItems = async () => {
 };
 
 export const useGetCollection = () => {
-	const { sendRequest, didSubmit } = useHttp();
+	const { sendRequest, didSubmit,error } = useHttp();
 	const [collection, setCollection] = useState<CollectionInterface | null>(
 		null
 	);
@@ -105,7 +105,7 @@ export const useGetCollection = () => {
 		);
 	}, [id]);
 
-	return { didFetchCollection: didSubmit, collection, requestCollection };
+	return { didFetchCollection: didSubmit, collection, requestCollection, error };
 };
 
 export const useDeleteCollection = () => {
@@ -148,16 +148,53 @@ export const useDeleteItem = () => {
 };
 
 export const useGetUsersCollections = () => {
-	const { sendRequest, error} = useHttp();
-    const [collections, setCollections]= useState<CollectionInterface[]|[]>([])
+	const { sendRequest, error } = useHttp();
+	const [collections, setCollections] = useState<CollectionInterface[] | []>(
+		[]
+	);
 
-    const requestCollections = useCallback( async(id:string)=>{
+	const requestCollections = useCallback(async (id: string) => {
+		const getResponse = (response: AxiosResponse) => {
+			setCollections(response.data);
+		};
+		await sendRequest(
+			`${process.env.REACT_APP_SERVER}/get-collections/${id}`,
+			{},
+			getResponse
+		);
+	}, []);
 
-        const getResponse = (response:AxiosResponse)=>{
-            setCollections(response.data)
-        }
-        await sendRequest(`${process.env.REACT_APP_SERVER}/get-collections/${id}`,{}, getResponse)
-    },[])
+	return { requestCollections, error, collections };
+};
 
-    return {requestCollections, error, collections}
+export const useEditCollection = () => {
+	const { getAccessTokenSilently } = useAuth0();
+	const { sendRequest, isLoading, error } = useHttp();
+	const navigate = useNavigate();
+
+	const sendEditRequest = async (
+		id: string,
+		data: {
+			title?: string;
+			description?: string;
+			topic?: string;
+			tags?: string[];
+		}
+	) => {
+		const accessToken = await getAccessTokenSilently({
+			audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+		});
+
+		const getResponse = (response: AxiosResponse) => {
+			navigate(`/view-collection/${id}`);
+		};
+
+		await sendRequest(`${process.env.REACT_APP_SERVER}/edit-collection/${id}`, {
+			body: data,
+			method: 'PATCH',
+			headers: { Authorization: `Bearer ${accessToken}` },
+			getResponse,
+		});
+	};
+	return { sendEditRequest, isEditing: isLoading, editError: error };
 };

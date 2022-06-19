@@ -1,5 +1,5 @@
-import { useState, forwardRef, useImperativeHandle} from 'react';
-import { MultiSelect } from 'react-multi-select-component';
+import { useState, forwardRef, useImperativeHandle, useEffect } from 'react';
+import { MultiSelect} from 'react-multi-select-component';
 
 const options = [
 	{ label: 'wine', value: 'wine' },
@@ -9,24 +9,33 @@ const options = [
 	{ label: 'rare', value: 'rare' },
 ];
 export type TagsType = {
-	label: 'string';
-	value: 'string';
-	
+	label: string;
+	value: string;
 };
-const Autocomplete = forwardRef((props, ref) => {
-	const [selected, setSelected] = useState([]);
-	useImperativeHandle(
-		ref,
-		() => ({
-			getTags: () => {
-				return selected;
-			},
-		}),
-		[selected]
-	);
+const Autocomplete: React.FC<{ preselected?: string[]; ref: any }> = forwardRef(
+	(props, ref) => {
+		const [selected, setSelected] = useState<TagsType[]|[]>([]);
 
-	return (
-	
+		useEffect(() => {
+			if (!props.preselected) {
+				return;
+			}
+			const preselectedTags = props.preselected.map((t) => {
+				return { label: t, value: t };
+			});
+			setSelected(preselectedTags);
+		}, [props.preselected]);
+		useImperativeHandle(
+			ref,
+			() => ({
+				getTags: () => {
+					return selected;
+				},
+			}),
+			[selected]
+		);
+
+		return (
 			<MultiSelect
 				options={options}
 				value={selected}
@@ -35,8 +44,8 @@ const Autocomplete = forwardRef((props, ref) => {
 				isCreatable
 				hasSelectAll={false}
 			/>
-	
-	);
-});
+		);
+	}
+);
 
 export default Autocomplete;

@@ -15,7 +15,7 @@ const ViewCollection = () => {
 	const { id } = useParams();
 	const { sendDeleteCollectionRequest } = useDeleteCollection();
 	const { sendDeleteItemRequest } = useDeleteItem();
-	const { collection, didFetchCollection, requestCollection } =
+	const { collection, didFetchCollection, requestCollection, error } =
 		useGetCollection();
 	const { t } = useTranslation();
 	const { user } = useAuth0();
@@ -41,8 +41,15 @@ const ViewCollection = () => {
 			date: i.date.toString().slice(0, 10),
 		};
 	});
-	if (didFetchCollection && !collection) {
+	
+	if (didFetchCollection && !collection && !error) {
 		return <Navigate to="/404" />;
+	}
+	if(didFetchCollection && error){
+		return error
+	}
+	if(!didFetchCollection){
+		return <p>{t("loading")}...</p>
 	}
 	return (
 		<>
@@ -116,7 +123,7 @@ const ViewCollection = () => {
 					})}
 				</p>
 
-				{!collection?.items?.length && (
+				{collection && !collection.items?.length && (
 					<p className="text-center">{t('no_items')}</p>
 				)}
 				{tableData && tableData.length > 0 && (
