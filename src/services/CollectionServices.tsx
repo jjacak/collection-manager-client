@@ -87,7 +87,7 @@ export const getLatestItems = async () => {
 };
 
 export const useGetCollection = () => {
-	const { sendRequest, didSubmit,error } = useHttp();
+	const { sendRequest, didSubmit, error } = useHttp();
 	const [collection, setCollection] = useState<CollectionInterface | null>(
 		null
 	);
@@ -105,7 +105,12 @@ export const useGetCollection = () => {
 		);
 	}, [id]);
 
-	return { didFetchCollection: didSubmit, collection, requestCollection, error };
+	return {
+		didFetchCollection: didSubmit,
+		collection,
+		requestCollection,
+		error,
+	};
 };
 
 export const useDeleteCollection = () => {
@@ -189,12 +194,15 @@ export const useEditCollection = () => {
 			navigate(`/view-collection/${id}`);
 		};
 
-		await sendRequest(`${process.env.REACT_APP_SERVER}/edit-collection/${id}`, {
-			body: data,
-			method: 'PATCH',
-			headers: { Authorization: `Bearer ${accessToken}` },
-			getResponse,
-		});
+		await sendRequest(
+			`${process.env.REACT_APP_SERVER}/edit-collection/${id}`,
+			{
+				body: data,
+				method: 'PATCH',
+				headers: { Authorization: `Bearer ${accessToken}` },
+			},
+			getResponse
+		);
 	};
 	return { sendEditRequest, isEditing: isLoading, editError: error };
 };
