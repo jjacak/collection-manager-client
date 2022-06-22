@@ -66,7 +66,9 @@
     "edit":"Edytuj",
     "view":"Zobacz",
     "return":"Powrót",
-    "edit_collection":"Edytuj kolecję"
+    "edit_collection":"Edytuj kolecję",
+    "edit_image": "Edytuj okładkę",
+	"choose_image": "Wybierz obraz:"
 
 
 }

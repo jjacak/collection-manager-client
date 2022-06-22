@@ -206,3 +206,40 @@ export const useEditCollection = () => {
 	};
 	return { sendEditRequest, isEditing: isLoading, editError: error };
 };
+
+export const useDeleteImage = () => {
+	const { sendRequest } = useHttp();
+	const { getAccessTokenSilently } = useAuth0();
+
+	const sendDeleteImageRequest = async (id: string) => {
+		const accessToken = await getAccessTokenSilently({
+			audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+		});
+		await sendRequest(`${process.env.REACT_APP_SERVER}/delete-image/${id}`, {
+			method: 'DELETE',
+			headers: { Authorization: `Bearer ${accessToken}` },
+		});
+	};
+
+	return { sendDeleteImageRequest };
+};
+
+export const useEditImage = () => {
+	const { sendRequest,isLoading } = useHttp();
+	const { getAccessTokenSilently } = useAuth0();
+
+	const sendEditImageRequest = async (
+		id: string,
+		data: FormData,
+	) => {
+		const accessToken = await getAccessTokenSilently({
+			audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+		});
+		await sendRequest(`${process.env.REACT_APP_SERVER}/edit-image/${id}`, {
+			method: 'PATCH',
+			body: data,
+			headers: { Authorization: `Bearer ${accessToken}` },
+		});
+	};
+	return {sendEditImageRequest, isLoading};
+};

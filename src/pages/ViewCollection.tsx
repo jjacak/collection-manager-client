@@ -1,15 +1,20 @@
 import { NavLink } from 'react-router-dom';
 import { useParams, Navigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Badge, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import CollectionTable from '../components/CollectionTable';
+import defaultImage from '../img/default-img.png';
+import classes from './ViewCollection.module.css';
 import { useAuth0 } from '@auth0/auth0-react';
 import {
 	useGetCollection,
 	useDeleteCollection,
 	useDeleteItem,
+	useDeleteImage,
 } from '../services/CollectionServices';
+import { TrashIcon, PencilIcon } from '@primer/octicons-react';
+import EditImageModal from '../components/EditImageModal';
 
 const ViewCollection = () => {
 	const { id } = useParams();
@@ -17,14 +22,17 @@ const ViewCollection = () => {
 	const { sendDeleteItemRequest } = useDeleteItem();
 	const { collection, didFetchCollection, requestCollection, error } =
 		useGetCollection();
+	const { sendDeleteImageRequest } = useDeleteImage();
 	const { t } = useTranslation();
 	const { user } = useAuth0();
+	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	const isOwner = user?.sub === collection?.owner_id;
 	const isAdmin =
 		user?.['http:/collection-manager-app.com/roles']?.includes('admin');
 	const isAuthorized = isOwner || isAdmin;
 
+	console.log(collection);
 	useEffect(() => {
 		requestCollection();
 	}, [requestCollection]);
@@ -34,6 +42,18 @@ const ViewCollection = () => {
 		requestCollection();
 	};
 
+	const deleteImage = async () => {
+		await sendDeleteImageRequest(id!);
+		requestCollection();
+	};
+	const closeModal = () => {
+		setIsModalOpen(false);
+		requestCollection();
+	};
+	const showModal = () => {
+		setIsModalOpen(true);
+	};
+
 	const tableData = collection?.items?.map((i) => {
 		return {
 			_id: i._id,
@@ -41,15 +61,15 @@ const ViewCollection = () => {
 			date: i.date.toString().slice(0, 10),
 		};
 	});
-	
+
 	if (didFetchCollection && !collection && !error) {
 		return <Navigate to="/404" />;
 	}
-	if(didFetchCollection && error){
-		return error
+	if (didFetchCollection && error) {
+		return error;
 	}
-	if(!didFetchCollection){
-		return <p>{t("loading")}...</p>
+	if (!didFetchCollection) {
+		return <p>{t('loading')}...</p>;
 	}
 	return (
 		<>
@@ -89,13 +109,22 @@ const ViewCollection = () => {
 						</Button>
 					</div>
 				)}
-				{collection?.image && (
-					<img
-						src={collection?.image}
-						className="img-fluid d-block rounded mx-auto mb-4"
-						alt="Collection cover"
-					/>
-				)}
+				<div className={classes['cover-image']}>
+					<img src={collection?.image || defaultImage} alt="Collection cover" />
+					{isAuthorized && (
+						<div className={classes['image-options']}>
+							<button onClick={showModal}>
+								<PencilIcon />
+							</button>
+							{collection?.image && (
+								<button onClick={deleteImage}>
+									<TrashIcon />
+								</button>
+							)}
+						</div>
+					)}
+				</div>
+
 				<p className="fs-4">
 					<span className="fw-bold">{t('author')}: </span>
 					{collection?.owner_name}
@@ -131,6 +160,14 @@ const ViewCollection = () => {
 						items={tableData}
 						isAuthorized={isAuthorized}
 						onDelete={deleteItem}
+					/>
+				)}
+				{isModalOpen && collection && (
+					<EditImageModal
+						onClose={closeModal}
+						show={isModalOpen}
+						id={collection._id}
+						cloudinary_id={collection.cloudinary_id}
 					/>
 				)}
 			</section>
