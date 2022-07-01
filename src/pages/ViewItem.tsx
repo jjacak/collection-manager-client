@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { CollectionItem } from '../ts/types';
-import { Button } from 'react-bootstrap';
+import { Button, Badge } from 'react-bootstrap';
 import { useDeleteItem } from '../services/CollectionServices';
 import { useGetCollection } from '../services/CollectionServices';
 import { TrashIcon, PencilIcon } from '@primer/octicons-react';
@@ -94,6 +94,19 @@ const ViewItem = () => {
 				)}
 			</div>
 			<article>
+			<p>
+					{item?.tags?.map((t, i) => {
+						return (
+							<Badge
+								bg="warning"
+								style={{ marginRight: '3px', cursor: 'pointer' }}
+								key={i}
+							>
+								{t}
+							</Badge>
+						);
+					})}
+				</p>
 				<p className="fs-4">
 					<span className="fw-bold">{t('author')}: </span>
 					{collection?.owner_name}

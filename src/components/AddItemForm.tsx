@@ -238,14 +238,14 @@ const AddItemForm: React.FC<{
 						})}
 						<div className="text-center">
 							<Button className="button--alt" type="button" onClick={showModal}>
-								{item ? t('confirm') : t('add_field')}
+								{t('add_field')}
 							</Button>
 						</div>
 						<div className="my-4 text-center">
 							<Button type="submit" className="button">
 								{isLoading || isEditing
 									? `${t('sending')}...`
-									: `${t('add_item')}`}
+									: `${t('confirm')}`}
 							</Button>
 						</div>
 						{error && (

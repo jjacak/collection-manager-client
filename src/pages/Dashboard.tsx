@@ -11,6 +11,7 @@ type NewestItemType = {
 	owner_id: string;
 	owner_name: string;
 	_id: string;
+	tags:string[]
 };
 const Dashboard = () => {
 	const { t } = useTranslation();
@@ -46,7 +47,8 @@ const Dashboard = () => {
 							ownerName: e.owner_name,
 							collectionId: e._id,
 							itemName: e.items[0].name.value,
-							itemId:e.items[0]._id
+							itemId:e.items[0]._id,
+							tags:e.items[0].tags
 						};
 						return <ItemCard key={e._id} item={item} />;
 					})}

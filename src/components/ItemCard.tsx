@@ -1,4 +1,4 @@
-import { Card } from 'react-bootstrap';
+import { Card, Badge } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -8,10 +8,12 @@ type ItemProps = {
 	collectionId: string;
 	itemName: string;
 	itemId:string;
+	tags:string[]
 };
 const ItemCard: React.FC<{ item: ItemProps }> = (props) => {
 	const { t } = useTranslation();
 
+	console.log(props.item)
 	return (
 		<Card
 			className="m-2 p-0"
@@ -30,6 +32,19 @@ const ItemCard: React.FC<{ item: ItemProps }> = (props) => {
 				<Card.Text>
 					<span className="fw-bold">{t('author')}: </span>
 					{props.item.ownerName}
+				</Card.Text>
+				<Card.Text>
+					{props.item.tags?.map((t, i) => {
+						return (
+							<Badge
+								bg="warning"
+								style={{ marginRight: '3px', cursor: 'pointer' }}
+								key={i}
+							>
+								{t}
+							</Badge>
+						);
+					})}
 				</Card.Text>
 				<NavLink
 					to={`/view-item/${props.item.itemId}`}
