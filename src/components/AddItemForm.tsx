@@ -12,7 +12,7 @@ import { v4 as uuid } from 'uuid';
 import Autocomplete, { TagsType } from '../UI/FormFields/Autocomplete';
 import { useTranslation } from 'react-i18next';
 import { useAuth0 } from '@auth0/auth0-react';
-import { useAddItem } from '../services/CollectionServices';
+import { useAddItem, useEditItem } from '../services/CollectionServices';
 import { CollectionItem } from '../ts/types';
 type initialValuesType = {
 	[key: string]: string;
@@ -41,49 +41,48 @@ const AddItemForm: React.FC<{
 	const { user } = useAuth0();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const { error, isLoading, postItem } = useAddItem();
+	const { sendEditRequest, isEditing, editError } = useEditItem();
 	const [formFields, setFormFields] = useState<FormFieldInterface[]>([
 		{
 			name: 'name',
 			label: `${t('item_name')}:`,
 			type: 'text',
-			value:'',
+			value: '',
 			validationType: 'string',
 			validation: { type: 'required', params: `${t('field_required')}` },
 		},
 	]);
 
-	useEffect(()=>{
-
-	if (item) {
-		let itemsData: FormFieldInterface[] = [];
-		for (let [key, value] of Object.entries(item)) {
-			if (
-				!['author', '_id', 'tags', 'comments', 'likes', 'date'].includes(key)
-			) {
-				let validationType = value.type;
+	useEffect(() => {
+		if (item) {
+			let itemsData: FormFieldInterface[] = [];
+			for (let [key, value] of Object.entries(item)) {
 				if (
-					value.type === 'text' ||
-					value.type === 'textarea' ||
-					value.type === 'radio'
+					!['author', '_id', 'tags', 'comments', 'likes', 'date'].includes(key)
 				) {
-					validationType = 'string';
+					let validationType = value.type;
+					if (
+						value.type === 'text' ||
+						value.type === 'textarea' ||
+						value.type === 'radio'
+					) {
+						validationType = 'string';
+					}
+					const values = {
+						name: key,
+						label: value.label,
+						type: value.type,
+						value: value.value,
+						validationType,
+						validation: { type: 'required', params: `${t('field_required')}` },
+					};
+					itemsData.push(values);
 				}
-				const values = {
-					name: key,
-					label: value.label,
-					type: value.type,
-					value: value.value,
-					validationType,
-					validation: { type: 'required', params: `${t('field_required')}` },
-				};
-				itemsData.push(values);
 			}
+
+			setFormFields(itemsData);
 		}
-
-		setFormFields(itemsData);
-	}
-
-	},[])
+	}, []);
 
 	const yupSchema = formFields.reduce(YupSchemaGenerator, {});
 	const schema = yup.object().shape(yupSchema);
@@ -107,7 +106,7 @@ const AddItemForm: React.FC<{
 			name: uuid(),
 			label: values.label,
 			type: values.type,
-			value:'',
+			value: '',
 			validationType: validationType,
 			validation: { type: 'required', params: 'This field is required.' },
 		};
@@ -124,11 +123,8 @@ const AddItemForm: React.FC<{
 
 	let initialValues: initialValuesType = {};
 	formFields.forEach((item) => {
-		
 		initialValues[item.name] = item.value;
-
 	});
-
 
 	return (
 		<>
@@ -155,10 +151,14 @@ const AddItemForm: React.FC<{
 						date: new Date(),
 					};
 
+					if (item) {
+						sendEditRequest(item._id, data);
+						return;
+					}
 					postItem(data);
 				}}
 				initialValues={initialValues}
-				enableReinitialize
+				enableReinitialize={!!item}
 			>
 				{({ handleSubmit, handleChange, values, initialValues }) => (
 					<Form
@@ -175,7 +175,7 @@ const AddItemForm: React.FC<{
 							style={{ color: 'var(--text-constant)' }}
 						>
 							<Form.Label htmlFor="autocomplete">{t('tags')}</Form.Label>
-							<Autocomplete ref={tagsRef} preselected={item?.tags}/>
+							<Autocomplete ref={tagsRef} preselected={item?.tags} />
 						</Form.Group>
 
 						{formFields.map((f, i) => {
@@ -224,30 +224,33 @@ const AddItemForm: React.FC<{
 							return (
 								<Field
 									key={i}
-									label={f.name!=='name'?`${f.label}:`:`${t("item_name")}:`}
+									label={
+										f.name !== 'name' ? `${f.label}:` : `${t('item_name')}:`
+									}
 									type={f.type}
 									name={f.name}
 									component={TextFormField}
 									value={values[f.name] || ''}
 									addontext={f.name !== 'name' ? '-' : ''}
 									addononclick={deleteField.bind(null, f.name)}
-							
 								/>
 							);
 						})}
 						<div className="text-center">
 							<Button className="button--alt" type="button" onClick={showModal}>
-								{t('add_field')}
+								{item ? t('confirm') : t('add_field')}
 							</Button>
 						</div>
 						<div className="my-4 text-center">
 							<Button type="submit" className="button">
-								{isLoading ? `${t('sending')}...` : `${t('add_item')}`}
+								{isLoading || isEditing
+									? `${t('sending')}...`
+									: `${t('add_item')}`}
 							</Button>
 						</div>
 						{error && (
 							<p className="text-danger">
-								{error || 'Sorry, something went wrong!'}
+								{error || editError || 'Sorry, something went wrong!'}
 							</p>
 						)}
 					</Form>

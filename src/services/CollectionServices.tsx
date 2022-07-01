@@ -5,6 +5,15 @@ import { useState, useCallback } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import axios, { AxiosResponse } from 'axios';
 
+type CollectionItemDataType = {
+	[key: string]:
+		| string
+		| undefined
+		| Date
+		| { value: string; label: string; type: string };
+};
+
+
 export const useCreateCollection = () => {
 	const { getAccessTokenSilently } = useAuth0();
 	const navigate = useNavigate();
@@ -42,14 +51,7 @@ export const useAddItem = () => {
 
 	const { id } = useParams();
 
-	type CollectionItemDataType = {
-		[key: string]:
-			| string
-			| undefined
-			| Date
-			| { value: string; label: string; type: string };
-	};
-
+	
 	const getResponse = (response: AxiosResponse) => {
 		navigate(`/view-collection/${id}`);
 	};
@@ -242,4 +244,34 @@ export const useEditImage = () => {
 		});
 	};
 	return {sendEditImageRequest, isLoading};
+};
+
+export const useEditItem = () => {
+	const { getAccessTokenSilently } = useAuth0();
+	const { sendRequest, isLoading, error } = useHttp();
+	const navigate = useNavigate();
+
+	const sendEditRequest = async (
+		id: string,
+		data: CollectionItemDataType
+	) => {
+		const accessToken = await getAccessTokenSilently({
+			audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+		});
+
+		const getResponse = (response: AxiosResponse) => {
+			navigate(`/view-item/${id}`);
+		};
+
+		await sendRequest(
+			`${process.env.REACT_APP_SERVER}/edit-item/${id}`,
+			{
+				body: data,
+				method: 'PATCH',
+				headers: { Authorization: `Bearer ${accessToken}` },
+			},
+			getResponse
+		);
+	};
+	return { sendEditRequest, isEditing: isLoading, editError: error };
 };
