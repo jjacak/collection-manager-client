@@ -6,7 +6,7 @@ const AddCollection = () => {
 
 	return (
 		<section>
-			<h1 className="text-center mb-4 bg-warning">{t('create_collection')}</h1>
+			<h1>{t('create_collection')}</h1>
 			<AddCollectionForm />
 		</section>
 	);

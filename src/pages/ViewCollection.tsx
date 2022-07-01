@@ -13,7 +13,7 @@ import {
 	useDeleteItem,
 	useDeleteImage,
 } from '../services/CollectionServices';
-import { TrashIcon, PencilIcon } from '@primer/octicons-react';
+import { TrashIcon, PencilIcon, PlusIcon } from '@primer/octicons-react';
 import EditImageModal from '../components/EditImageModal';
 
 const ViewCollection = () => {
@@ -32,7 +32,7 @@ const ViewCollection = () => {
 		user?.['http:/collection-manager-app.com/roles']?.includes('admin');
 	const isAuthorized = isOwner || isAdmin;
 
-	console.log(collection);
+
 	useEffect(() => {
 		requestCollection();
 	}, [requestCollection]);
@@ -74,7 +74,7 @@ const ViewCollection = () => {
 	return (
 		<>
 			<section>
-				<h1 className="text-center mb-4 bg-warning">
+				<h1>
 					{t('collection')}: {collection?.title}
 				</h1>
 				{isAuthorized && (
@@ -83,29 +83,26 @@ const ViewCollection = () => {
 							className="btn"
 							style={{
 								backgroundColor: 'var(--accent)',
-								color: 'var(--text-primary',
 								marginRight: '3px',
 							}}
 							to={`/add-item/${id}`}
 						>
-							{t('add_item')}
+							<PlusIcon/>
 						</NavLink>
 						<NavLink
-							className="btn"
+							className="btn btn-secondary"
 							style={{
-								borderColor: 'var(--accent)',
-								color: 'var(--text-primary',
 								marginRight: '3px',
 							}}
 							to={`/edit-collection/${id}`}
 						>
-							{t('edit')}
+							<PencilIcon/>
 						</NavLink>
-						<Button
-							className="btn-danger"
+						<Button className='btn-danger'
+							
 							onClick={sendDeleteCollectionRequest}
 						>
-							{t('delete')}
+							<TrashIcon />
 						</Button>
 					</div>
 				)}

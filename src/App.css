@@ -28,3 +28,23 @@
 .react-bootstrap-table .order-4{
     margin-right: 10px;
 }
+
+ section h1 {
+    position: relative;
+    font-size: 3.2rem;
+    margin-bottom: 4rem; 
+    color: var(--text-primary);
+    text-align: center;
+  }
+  h1::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+    bottom: -1rem;
+    width: 15rem;
+    height: 0.2rem;
+    background-color: var(--accent);
+
+  }

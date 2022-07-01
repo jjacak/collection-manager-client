@@ -68,5 +68,6 @@
 	"return": "Return",
 	"edit_collection": "Edit collection",
 	"edit_image": "Edit cover image",
-	"choose_image": "Choose image:"
+	"choose_image": "Choose image:",
+	"edit_item":"Edit item"
 }

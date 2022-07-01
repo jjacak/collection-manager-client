@@ -68,7 +68,8 @@
     "return":"Powrót",
     "edit_collection":"Edytuj kolecję",
     "edit_image": "Edytuj okładkę",
-	"choose_image": "Wybierz obraz:"
+	"choose_image": "Wybierz obraz:",
+    "edit_item":"Edytuj pozycję"
 
 
 }

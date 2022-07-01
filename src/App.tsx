@@ -17,6 +17,7 @@ import ViewCollection from './pages/ViewCollection';
 import AddItem from './pages/AddItem';
 import ViewItem from './pages/ViewItem';
 import EditCollection from './pages/EditCollection';
+import EditItem from './pages/EditItem';
 
 function App() {
 	const themeContext = useContext(ThemeContext);
@@ -69,6 +70,12 @@ function App() {
 							path="edit-collection/:id"
 							element={
 								<RoleProtectedRoute component={EditCollection} />
+							}
+						/>
+							<Route
+							path="edit-item/:id"
+							element={
+								<RoleProtectedRoute component={EditItem} />
 							}
 						/>
 						<Route path="*" element={<NotFound />} />

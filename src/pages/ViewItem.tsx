@@ -1,19 +1,20 @@
 import { useParams, NavLink, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useEffect} from 'react';
+import { useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { CollectionItem } from '../ts/types';
 import { Button } from 'react-bootstrap';
 import { useDeleteItem } from '../services/CollectionServices';
 import { useGetCollection } from '../services/CollectionServices';
+import { TrashIcon, PencilIcon } from '@primer/octicons-react';
 
 const ViewItem = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
 
-	const {collection, requestCollection} = useGetCollection()
+	const { collection, requestCollection } = useGetCollection();
 	const { t } = useTranslation();
-	const { user} = useAuth0();
+	const { user } = useAuth0();
 	const { sendDeleteItemRequest } = useDeleteItem();
 	const item: CollectionItem | undefined = collection?.items?.filter(
 		(i) => i._id === id
@@ -22,11 +23,9 @@ const ViewItem = () => {
 	const isAdmin =
 		user?.['http:/collection-manager-app.com/roles']?.includes('admin');
 	const isAuthorized = isOwner || isAdmin;
-
+	
 	useEffect(() => {
-
-		requestCollection()
-
+		requestCollection();
 	}, [id]);
 
 	const deleteItem = async () => {
@@ -65,14 +64,14 @@ const ViewItem = () => {
 
 	return (
 		<section>
-			<h1 className="text-center mb-4 bg-warning">
+			<h1>
 				{t('item')}: {item?.name.value}
 			</h1>
 
 			<div className="text-center mb-4">
 				<NavLink
-					className="btn border-warning"
-					style={{ marginRight: '3px' }}
+					className="btn border-secondary"
+					style={{ marginRight: '3px', color: 'var(--text-primary)' }}
 					to={`/view-collection/${collection?._id}`}
 				>
 					{t('return')}
@@ -80,18 +79,16 @@ const ViewItem = () => {
 				{isAuthorized && (
 					<>
 						<NavLink
-							className="btn"
+							className="btn btn-secondary"
 							style={{
-								borderColor: 'var(--accent)',
-								color: 'var(--text-primary',
 								marginRight: '3px',
 							}}
 							to={`/edit-item/${id}`}
 						>
-							{t('edit')}
+							<PencilIcon />
 						</NavLink>
 						<Button className="btn-danger" onClick={deleteItem}>
-							{t('delete')}
+							<TrashIcon />
 						</Button>
 					</>
 				)}

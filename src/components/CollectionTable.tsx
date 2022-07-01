@@ -6,6 +6,7 @@ import { useContext } from 'react';
 import { ThemeContext } from '../store/theme-context';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { TrashIcon, PencilIcon } from '@primer/octicons-react';
 
 const ActionFormatter = (
 	cell: any,
@@ -13,7 +14,6 @@ const ActionFormatter = (
 	index: number,
 	formatExtraData: any
 ) => {
-	
 	return (
 		<div className="text-center">
 			<NavLink
@@ -28,18 +28,33 @@ const ActionFormatter = (
 				{formatExtraData.view}
 			</NavLink>
 			{formatExtraData.isAuthorized && (
-				<Button className="btn-warning" style={{ marginRight: '4px' }}>
-					{formatExtraData.edit}
+				<NavLink
+				className="btn btn-secondary"
+				style={{
+					marginRight: '3px',
+				}}
+				to={`/edit-item/${row._id}`}
+			>
+				<PencilIcon />
+			</NavLink>
+			)}
+			{formatExtraData.isAuthorized && (
+				<Button
+					className="btn-danger"
+					onClick={formatExtraData.onDelete.bind(null, row._id)}
+				>
+					<TrashIcon />
 				</Button>
 			)}
-			{formatExtraData.isAuthorized && <Button className="btn-danger" onClick={formatExtraData.onDelete.bind(null, row._id)}>{formatExtraData.delete}</Button>}
 		</div>
 	);
 };
 
-const CollectionTable: React.FC<{ items: any[]; isAuthorized: boolean; onDelete:(itemID:string)=>void }> = (
-	props
-) => {
+const CollectionTable: React.FC<{
+	items: any[];
+	isAuthorized: boolean;
+	onDelete: (itemID: string) => void;
+}> = (props) => {
 	const { t } = useTranslation();
 	const themeContext = useContext(ThemeContext);
 	const columns = [
@@ -62,7 +77,13 @@ const CollectionTable: React.FC<{ items: any[]; isAuthorized: boolean; onDelete:
 			dataField: 'actions',
 			text: 'Actions',
 			isDummyField: true,
-			formatExtraData: {isAuthorized:props.isAuthorized,onDelete:props.onDelete ,view:t("view"), edit:t("edit"), delete:t("delete")},
+			formatExtraData: {
+				isAuthorized: props.isAuthorized,
+				onDelete: props.onDelete,
+				view: t('view'),
+				edit: t('edit'),
+				delete: t('delete'),
+			},
 			formatter: ActionFormatter,
 		},
 	];

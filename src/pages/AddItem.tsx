@@ -6,7 +6,7 @@ const AddItem = () => {
 
 	return (
 		<section>
-			<h1 className="text-center mb-4 bg-warning">{t("add_item")}</h1>
+			<h1>{t("add_item")}</h1>
 			<AddItemForm />
 		</section>
 	);

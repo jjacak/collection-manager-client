@@ -1,15 +1,22 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import AddCollectionForm from '../components/AddCollectionForm';
 import { useGetCollection } from '../services/CollectionServices';
 import { Navigate } from 'react-router-dom';
+import { CollectionItem } from '../ts/types';
 import { useAuth0 } from '@auth0/auth0-react';
+import { useParams} from 'react-router-dom';
+import AddItemForm from '../components/AddItemForm';
 
-const EditCollection = () => {
+const EditItem = () => {
 	const { t } = useTranslation();
 	const { collection, didFetchCollection, requestCollection } =
 		useGetCollection();
 	const { user, isLoading } = useAuth0();
+	const { id } = useParams();
+
+	const item: CollectionItem | undefined = collection?.items?.filter(
+		(i) => i._id === id
+	)[0];
 
 	const isOwner = user?.sub === collection?.owner_id;
 	const isAdmin =
@@ -23,26 +30,17 @@ const EditCollection = () => {
 	if (didFetchCollection && !collection) {
 		return <Navigate to="/404" />;
 	}
-    if(!isAuthorized && !isLoading){
+	if (!isAuthorized && !isLoading) {
 		return <Navigate to="/" />;
-
-    }
+	}
 
 	return (
 		<section>
-			{didFetchCollection && collection &&(
+			{didFetchCollection && collection && item && (
 				<div>
-					<h1>
-						{t('edit_collection')}
-					</h1>
-					<AddCollectionForm
-						editedCollectionValues={{
-							title: collection.title,
-							topic: collection.topic,
-							description: collection.description,
-							tags: collection.tags,
-							id: collection._id,
-						}}
+					<h1>{t('edit_item')}</h1>
+					<AddItemForm
+						item={item}
 					/>
 				</div>
 			)}
@@ -50,4 +48,4 @@ const EditCollection = () => {
 	);
 };
 
-export default EditCollection;
+export default EditItem;

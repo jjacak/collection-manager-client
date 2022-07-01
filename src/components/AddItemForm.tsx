@@ -3,7 +3,7 @@ import { Form, Button as BButon } from 'react-bootstrap';
 import * as yup from 'yup';
 import TextFormField from '../UI/FormFields/TextFormField';
 import Button from '../UI/Button';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Radio from '../UI/FormFields/Radio';
 import Textarea from '../UI/FormFields/Textarea';
 import YupSchemaGenerator from '../utils/YupSchemaGenerator';
@@ -13,7 +13,7 @@ import Autocomplete, { TagsType } from '../UI/FormFields/Autocomplete';
 import { useTranslation } from 'react-i18next';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useAddItem } from '../services/CollectionServices';
-
+import { CollectionItem } from '../ts/types';
 type initialValuesType = {
 	[key: string]: string;
 };
@@ -21,21 +21,70 @@ interface FormDataInterface {
 	[key: string]: { value: string; label: string; type: string };
 }
 
-const AddItemForm = () => {
+interface FormFieldInterface {
+	name: string;
+	label: string;
+	type: string;
+	value: any;
+	validationType: string;
+	validation: {
+		type: string;
+		params: string;
+	};
+}
+
+const AddItemForm: React.FC<{
+	item?: CollectionItem;
+}> = ({ item }) => {
 	const tagsRef = useRef<any>();
 	const { t } = useTranslation();
 	const { user } = useAuth0();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const { error, isLoading, postItem } = useAddItem();
-	const [formFields, setFormFields] = useState([
+	const [formFields, setFormFields] = useState<FormFieldInterface[]>([
 		{
 			name: 'name',
 			label: `${t('item_name')}:`,
 			type: 'text',
+			value:'',
 			validationType: 'string',
 			validation: { type: 'required', params: `${t('field_required')}` },
 		},
 	]);
+
+	useEffect(()=>{
+
+	if (item) {
+		let itemsData: FormFieldInterface[] = [];
+		for (let [key, value] of Object.entries(item)) {
+			if (
+				!['author', '_id', 'tags', 'comments', 'likes', 'date'].includes(key)
+			) {
+				let validationType = value.type;
+				if (
+					value.type === 'text' ||
+					value.type === 'textarea' ||
+					value.type === 'radio'
+				) {
+					validationType = 'string';
+				}
+				const values = {
+					name: key,
+					label: value.label,
+					type: value.type,
+					value: value.value,
+					validationType,
+					validation: { type: 'required', params: `${t('field_required')}` },
+				};
+				itemsData.push(values);
+			}
+		}
+
+		setFormFields(itemsData);
+	}
+
+	},[])
+
 	const yupSchema = formFields.reduce(YupSchemaGenerator, {});
 	const schema = yup.object().shape(yupSchema);
 
@@ -58,6 +107,7 @@ const AddItemForm = () => {
 			name: uuid(),
 			label: values.label,
 			type: values.type,
+			value:'',
 			validationType: validationType,
 			validation: { type: 'required', params: 'This field is required.' },
 		};
@@ -74,15 +124,17 @@ const AddItemForm = () => {
 
 	let initialValues: initialValuesType = {};
 	formFields.forEach((item) => {
-		initialValues[item.name] = '';
+		
+		initialValues[item.name] = item.value;
+
 	});
+
 
 	return (
 		<>
 			<Formik
 				validationSchema={schema}
 				onSubmit={(values) => {
-	
 					const tags = tagsRef.current.getTags().map((t: TagsType) => t.value);
 					let formData: FormDataInterface = {};
 
@@ -95,7 +147,7 @@ const AddItemForm = () => {
 							type: currentField.type,
 						};
 					}
-			
+
 					const data = {
 						...formData,
 						tags: tags,
@@ -106,8 +158,9 @@ const AddItemForm = () => {
 					postItem(data);
 				}}
 				initialValues={initialValues}
+				enableReinitialize
 			>
-				{({ handleSubmit, handleChange, values }) => (
+				{({ handleSubmit, handleChange, values, initialValues }) => (
 					<Form
 						noValidate
 						onSubmit={handleSubmit}
@@ -122,7 +175,7 @@ const AddItemForm = () => {
 							style={{ color: 'var(--text-constant)' }}
 						>
 							<Form.Label htmlFor="autocomplete">{t('tags')}</Form.Label>
-							<Autocomplete ref={tagsRef} />
+							<Autocomplete ref={tagsRef} preselected={item?.tags}/>
 						</Form.Group>
 
 						{formFields.map((f, i) => {
@@ -134,8 +187,8 @@ const AddItemForm = () => {
 										name={f.name}
 										component={Textarea}
 										value={values[f.name] || ''}
-										addonText="-"
-										addonOnClick={deleteField.bind(null, f.name)}
+										addontext="-"
+										addononclick={deleteField.bind(null, f.name)}
 									/>
 								);
 							}
@@ -171,13 +224,14 @@ const AddItemForm = () => {
 							return (
 								<Field
 									key={i}
-									label={f.label}
+									label={f.name!=='name'?`${f.label}:`:`${t("item_name")}:`}
 									type={f.type}
 									name={f.name}
 									component={TextFormField}
 									value={values[f.name] || ''}
-									addonText={f.name !== 'name' ? '-' : ''}
-									addonOnClick={deleteField.bind(null, f.name)}
+									addontext={f.name !== 'name' ? '-' : ''}
+									addononclick={deleteField.bind(null, f.name)}
+							
 								/>
 							);
 						})}
@@ -193,7 +247,7 @@ const AddItemForm = () => {
 						</div>
 						{error && (
 							<p className="text-danger">
-								{error ||'Sorry, something went wrong!'}
+								{error || 'Sorry, something went wrong!'}
 							</p>
 						)}
 					</Form>

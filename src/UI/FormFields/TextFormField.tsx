@@ -3,7 +3,7 @@ import { FieldProps, getIn, ErrorMessage } from "formik";
 import React from "react";
 
 
-const TextFormField: React.FC<FieldProps&{label?:string; addonText?:string, addonOnClick?:any}> = ({
+const TextFormField: React.FC<FieldProps&{label?:string; addontext?:string, addononclick?:any}> = ({
   field,
   form,
   ...props
@@ -15,8 +15,8 @@ const TextFormField: React.FC<FieldProps&{label?:string; addonText?:string, addo
 <Form.Group className="mb-3">
 						<Form.Label htmlFor={field.name}>{props.label}</Form.Label>
 				<InputGroup>
-        {props.addonText && <Button onClick = {props.addonOnClick} variant="outline-secondary" >
-      {props.addonText}
+        {props.addontext && <Button onClick = {props.addononclick} variant="outline-secondary" >
+      {props.addontext}
     </Button>}
         <Form.Control
 						  {...field}
