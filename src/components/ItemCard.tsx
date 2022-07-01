@@ -13,7 +13,6 @@ type ItemProps = {
 const ItemCard: React.FC<{ item: ItemProps }> = (props) => {
 	const { t } = useTranslation();
 
-	console.log(props.item)
 	return (
 		<Card
 			className="m-2 p-0"

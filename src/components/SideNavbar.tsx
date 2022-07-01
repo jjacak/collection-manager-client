@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
+import { ProSidebar, Menu, MenuItem } from 'react-pro-sidebar';
 import ThemeSwitch from '../UI/ThemeSwitch';
 import classes from './SideNavbar.module.css';
 import { useTranslation } from 'react-i18next';

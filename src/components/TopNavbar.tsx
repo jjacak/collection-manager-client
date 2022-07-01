@@ -3,7 +3,6 @@ import { FileDirectoryIcon } from '@primer/octicons-react';
 import SwitchLanguage from '../UI/SwitchLanguage';
 import { LinkContainer } from 'react-router-bootstrap';
 
-
 const TopNavbar: React.FC = () => {
 	return (
 		<Navbar style={{ backgroundColor: 'var(--components-background)' , position:'fixed', top:'0', left:'0', right:'0', zIndex:'2000'}}>
