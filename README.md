@@ -2,6 +2,7 @@
 
 ### Tech stack
 
+-Typescript\
 -React\
 -react-bootstrap\
 -Express\
